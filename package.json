@@ -1,0 +1,16 @@
+{
+    "name": "com.coffee.ui-effect-snapshot",
+    "displayName": "UI Effect Snapshot",
+    "description": "Let's take a snapshot of a specific frame with effect, and display it. The effect is non-realtime, light-weight, less-camera, but be effective enough.",
+    "version": "1.0.0",
+    "unity": "2017.1",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mob-sakai/UIEffectSnapshot.git"
+    },
+    "src": "Packages/UIEffectSnapshot",
+    "author": "mob-sakai <sakai861104@gmail.com> (https://github.com/mob-sakai)",
+    "dependencies": {
+    }
+} 
