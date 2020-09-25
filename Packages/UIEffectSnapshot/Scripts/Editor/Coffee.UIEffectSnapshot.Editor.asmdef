@@ -1,0 +1,12 @@
+{
+    "name": "Coffee.UIEffectSnapshot.Editor",
+    "references": [
+        "Coffee.UIEffectSnapshot"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
