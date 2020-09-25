@@ -3,4 +3,4 @@
 
 ### Features
 
-* impl ([44b1f62](https://github.com/mob-sakai/UIEffectSnapshot/commit/44b1f6271328c69c5801ddb3ce49961ee2b27b8f))
+* impl ([49501b1](https://github.com/mob-sakai/UIEffectSnapshot/commit/49501b1b0d0a32a193fab33fa8eb1c8efc8ef323))

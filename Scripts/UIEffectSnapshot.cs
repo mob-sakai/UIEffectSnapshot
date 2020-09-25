@@ -314,6 +314,11 @@ namespace Coffee.UIExtensions
             {
                 Capture();
             }
+
+            if (m_GlobalMode && Application.isPlaying)
+            {
+                texture = capturedTexture;
+            }
         }
 
         protected override void OnDisable()
