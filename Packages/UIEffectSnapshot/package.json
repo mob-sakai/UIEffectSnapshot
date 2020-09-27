@@ -9,7 +9,18 @@
         "type": "git",
         "url": "https://github.com/mob-sakai/UIEffectSnapshot.git"
     },
-    "src": "Packages/UIEffectSnapshot",
     "author": "mob-sakai <sakai861104@gmail.com> (https://github.com/mob-sakai)",
-    "dependencies": {}
+    "dependencies": {},
+    "keywords": [
+        "ui",
+        "effect",
+        "snapshot"
+    ],
+    "samples": [
+        {
+            "displayName": "Demo",
+            "description": "UI Particle Demo",
+            "path": "Samples~/Demo"
+        }
+    ]
 }
