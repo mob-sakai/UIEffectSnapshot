@@ -2,7 +2,7 @@
     "name": "com.coffee.ui-effect-snapshot",
     "displayName": "UI Effect Snapshot",
     "description": "Let's take a snapshot of a specific frame with effect, and display it. The effect is non-realtime, light-weight, less-camera, but be effective enough.",
-    "version": "1.0.0-preview.2",
+    "version": "1.0.0-preview.3",
     "unity": "2018.3",
     "license": "MIT",
     "repository": {
