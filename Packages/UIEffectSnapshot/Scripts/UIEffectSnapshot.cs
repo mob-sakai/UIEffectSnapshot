@@ -161,6 +161,39 @@ namespace Coffee.UIExtensions
             rectTransform.position = rootTransform.position;
         }
 
+        public static void CaptureForGlobal(UIEffectSnapshotRequest request)
+        {
+            request.globalMode = true;
+            UIEffectSnapshotProcesser.instance.Register(request);
+        }
+
+        public static void CaptureForGlobal(
+            EffectMode effectMode = EffectMode.None, float effectFactor = 1f,
+            ColorMode colorMode = ColorMode.Multiply, float colorFactor = 1f, Color effectColor = default(Color),
+            BlurMode blurMode = BlurMode.FastBlur, float blurFactor = 1f, int blurIterations = 2,
+            SamplingRate samplingRate = SamplingRate.x2, SamplingRate reductionRate = SamplingRate.x2, FilterMode filterMode = FilterMode.Bilinear
+        )
+        {
+            if (effectColor == default(Color))
+                effectColor = Color.white;
+
+            var request = new UIEffectSnapshotRequest()
+            {
+                effectMode = effectMode,
+                effectFactor = effectFactor,
+                colorMode = colorMode,
+                colorFactor = colorFactor,
+                effectColor = effectColor,
+                blurMode = blurMode,
+                blurFactor = blurFactor,
+                blurIterations = blurIterations,
+                samplingRate = samplingRate,
+                reductionRate = reductionRate,
+                filterMode = filterMode,
+            };
+            CaptureForGlobal(request);
+        }
+
         /// <summary>
         /// Capture rendering result.
         /// </summary>
