@@ -89,7 +89,7 @@ Shader "Hidden/UIEffectSnapshot"
 			fixed4 frag_blur(v2f_img IN) : SV_Target
 			{
 				half2 blurFactor = _EffectFactor.xy;
-				half4 color = Tex2DBlurring1D(_MainTex, IN.uv, blurFactor * _MainTex_TexelSize.xy * 2);
+				half4 color = Tex2DBlurring1D(_MainTex, IN.uv, blurFactor * _MainTex_TexelSize.xy);
 				color.a = 1;
 				return color;
 			}

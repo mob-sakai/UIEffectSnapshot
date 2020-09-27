@@ -1,7 +1,10 @@
 ﻿using UnityEditor;
 using UnityEditor.UI;
 using UnityEngine;
-using DesamplingRate = Coffee.UIExtensions.UIEffectSnapshot.DesamplingRate;
+using SamplingRate = Coffee.UIExtensions.UIEffectSnapshotRequest.SamplingRate;
+using EffectMode = Coffee.UIExtensions.UIEffectSnapshotRequest.EffectMode;
+using ColorMode = Coffee.UIExtensions.UIEffectSnapshotRequest.ColorMode;
+using BlurMode = Coffee.UIExtensions.UIEffectSnapshotRequest.BlurMode;
 
 namespace Coffee.UIExtensions.Editors
 {
@@ -12,23 +15,45 @@ namespace Coffee.UIExtensions.Editors
     [CanEditMultipleObjects]
     public class UIEffectSnapshotEditor : RawImageEditor
     {
-        //################################
-        // Constant or Static Members.
-        //################################
-        static readonly GUIContent contentEffectColor = new GUIContent("Effect Color");
-
         public enum QualityMode
         {
-            Fast = (DesamplingRate.x2 << 0) + (DesamplingRate.x2 << 4) + (FilterMode.Bilinear << 8) + (2 << 10),
-            Medium = (DesamplingRate.x1 << 0) + (DesamplingRate.x1 << 4) + (FilterMode.Bilinear << 8) + (3 << 10),
-            Detail = (DesamplingRate.None << 0) + (DesamplingRate.x1 << 4) + (FilterMode.Bilinear << 8) + (5 << 10),
+            Fast = (SamplingRate.x2 << 0) + (SamplingRate.x2 << 4) + (FilterMode.Bilinear << 8) + (2 << 10),
+            Medium = (SamplingRate.x1 << 0) + (SamplingRate.x1 << 4) + (FilterMode.Bilinear << 8) + (3 << 10),
+            Detail = (SamplingRate.None << 0) + (SamplingRate.x1 << 4) + (FilterMode.Bilinear << 8) + (5 << 10),
             Custom = -1,
         }
 
+        private const int Bits4 = (1 << 4) - 1;
+        private const int Bits2 = (1 << 2) - 1;
 
-        //################################
-        // Public/Protected Members.
-        //################################
+        private readonly GUIContent _contentCaptureEffect = new GUIContent("Capture Effect");
+        private readonly GUIContent _contentAdvancedOption = new GUIContent("Advanced Option");
+        private readonly GUIContent _contentQualityMode = new GUIContent("Quality Mode");
+        private readonly GUIContent _contentResultTextureSetting = new GUIContent("Result Texture Setting");
+        private readonly GUIContent _contentDebug = new GUIContent("Debug");
+        private readonly GUIContent _contentCapture = new GUIContent("Capture");
+        private readonly GUIContent _contentRelease = new GUIContent("Release");
+
+        private bool _customAdvancedOption = false;
+        private SerializedProperty _spTexture;
+        private SerializedProperty _spColor;
+        private SerializedProperty _spRayCastTarget;
+        private SerializedProperty _spSamplingRate;
+        private SerializedProperty _spReductionRate;
+        private SerializedProperty _spFilterMode;
+        private SerializedProperty _spBlurIterations;
+        private SerializedProperty _spFitToScreen;
+        private SerializedProperty _spCaptureOnEnable;
+        private SerializedProperty _spGlobalMode;
+        private SerializedProperty _spEffectMode;
+        private SerializedProperty _spEffectFactor;
+        private SerializedProperty _spColorMode;
+        private SerializedProperty _spColorFactor;
+        private SerializedProperty _spEffectColor;
+        private SerializedProperty _spBlurMode;
+        private SerializedProperty _spBlurFactor;
+
+
         /// <summary>
         /// This function is called when the object becomes enabled and active.
         /// </summary>
@@ -37,17 +62,28 @@ namespace Coffee.UIExtensions.Editors
             base.OnEnable();
             _spTexture = serializedObject.FindProperty("m_Texture");
             _spColor = serializedObject.FindProperty("m_Color");
-            _spRaycastTarget = serializedObject.FindProperty("m_RaycastTarget");
-            _spDesamplingRate = serializedObject.FindProperty("m_DesamplingRate");
-            _spReductionRate = serializedObject.FindProperty("m_ReductionRate");
-            _spFilterMode = serializedObject.FindProperty("m_FilterMode");
-            _spIterations = serializedObject.FindProperty("m_BlurIterations");
-            _spKeepSizeToRootCanvas = serializedObject.FindProperty("m_FitToScreen");
-            _spBlurMode = serializedObject.FindProperty("m_BlurMode");
+            _spRayCastTarget = serializedObject.FindProperty("m_RaycastTarget");
+            _spFitToScreen = serializedObject.FindProperty("m_FitToScreen");
             _spCaptureOnEnable = serializedObject.FindProperty("m_CaptureOnEnable");
             _spGlobalMode = serializedObject.FindProperty("m_GlobalMode");
 
-            _customAdvancedOption = (qualityMode == QualityMode.Custom);
+            var r = serializedObject.FindProperty("m_Request");
+            _spSamplingRate = r.FindPropertyRelative("m_SamplingRate");
+            _spReductionRate = r.FindPropertyRelative("m_ReductionRate");
+            _spFilterMode = r.FindPropertyRelative("m_FilterMode");
+            _spEffectMode = r.FindPropertyRelative("m_EffectMode");
+            _spEffectFactor = r.FindPropertyRelative("m_EffectFactor");
+            _spColorMode = r.FindPropertyRelative("m_ColorMode");
+            _spColorFactor = r.FindPropertyRelative("m_ColorFactor");
+            _spEffectColor = r.FindPropertyRelative("m_EffectColor");
+            _spBlurMode = r.FindPropertyRelative("m_BlurMode");
+            _spBlurFactor = r.FindPropertyRelative("m_BlurFactor");
+            _spSamplingRate = r.FindPropertyRelative("m_SamplingRate");
+            _spReductionRate = r.FindPropertyRelative("m_ReductionRate");
+            _spFilterMode = r.FindPropertyRelative("m_FilterMode");
+            _spBlurIterations = r.FindPropertyRelative("m_BlurIterations");
+
+            _customAdvancedOption = qualityMode == QualityMode.Custom;
         }
 
         /// <summary>
@@ -55,7 +91,8 @@ namespace Coffee.UIExtensions.Editors
         /// </summary>
         public override void OnInspectorGUI()
         {
-            var graphic = (target as UIEffectSnapshot);
+            var current = target as UIEffectSnapshot;
+            if (current == null) return;
             serializedObject.Update();
 
             //================
@@ -63,49 +100,81 @@ namespace Coffee.UIExtensions.Editors
             //================
             EditorGUILayout.PropertyField(_spTexture);
             EditorGUILayout.PropertyField(_spColor);
-            EditorGUILayout.PropertyField(_spRaycastTarget);
+            EditorGUILayout.PropertyField(_spRayCastTarget);
+
+            GUILayout.Space(10);
+            EditorGUILayout.LabelField(_contentCaptureEffect, EditorStyles.boldLabel);
 
             //================
-            // Capture effect.
+            // Effect setting.
+            //================
+            // When effect is enable, show parameters.
+            EditorGUILayout.PropertyField(_spEffectMode);
+            if (_spEffectMode.intValue != (int) EffectMode.None)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(_spEffectFactor);
+                EditorGUI.indentLevel--;
+            }
+
+            //================
+            // Color setting.
+            //================
+            EditorGUILayout.PropertyField(_spColorMode);
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(_spEffectColor);
+                if (_spColorMode.intValue != (int) ColorMode.Multiply)
+                    EditorGUILayout.PropertyField(_spColorFactor);
+                EditorGUI.indentLevel--;
+            }
+
+            //================
+            // Blur setting.
+            //================
+            // When blur is enable, show parameters.
+            EditorGUILayout.PropertyField(_spBlurMode);
+            if (_spBlurMode.intValue != (int) BlurMode.None)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(_spBlurFactor);
+                EditorGUI.indentLevel--;
+            }
+
+            //================
+            // Advanced options.
             //================
             GUILayout.Space(10);
-            EditorGUILayout.LabelField("Capture Effect", EditorStyles.boldLabel);
-            DrawEffectProperties(serializedObject, "m_EffectColor");
+            EditorGUILayout.LabelField(_contentAdvancedOption, EditorStyles.boldLabel);
 
-            //================
-            // Advanced option.
-            //================
-            GUILayout.Space(10);
-            EditorGUILayout.LabelField("Advanced Option", EditorStyles.boldLabel);
-
-            EditorGUILayout.PropertyField(_spGlobalMode); // CaptureOnEnable.
-            EditorGUILayout.PropertyField(_spCaptureOnEnable); // CaptureOnEnable.
-            EditorGUILayout.PropertyField(_spKeepSizeToRootCanvas); // Keep Graphic Size To RootCanvas.
+            EditorGUILayout.PropertyField(_spGlobalMode); // Global Mode.
+            EditorGUILayout.PropertyField(_spCaptureOnEnable); // Capture On Enable.
+            EditorGUILayout.PropertyField(_spFitToScreen); // Fit To Screen.
 
             EditorGUI.BeginChangeCheck();
-            QualityMode quality = qualityMode;
-            quality = (QualityMode) EditorGUILayout.EnumPopup("Quality Mode", quality);
+            var quality = qualityMode;
+            quality = (QualityMode) EditorGUILayout.EnumPopup(_contentQualityMode, quality);
             if (EditorGUI.EndChangeCheck())
             {
-                _customAdvancedOption = (quality == QualityMode.Custom);
+                _customAdvancedOption = quality == QualityMode.Custom;
                 qualityMode = quality;
             }
 
             // When qualityMode is `Custom`, show advanced option.
             if (_customAdvancedOption)
             {
-                if (_spBlurMode.intValue != 0)
+                if ((BlurMode) _spBlurMode.intValue != BlurMode.None)
                 {
-                    EditorGUILayout.PropertyField(_spIterations); // Iterations.
+                    EditorGUILayout.PropertyField(_spBlurIterations); // Blur iterations.
                 }
 
-                DrawDesamplingRate(_spReductionRate); // Reduction rate.
+                DrawSamplingRate(_spReductionRate); // Reduction rate.
 
                 EditorGUILayout.Space();
-                EditorGUILayout.LabelField("Result Texture Setting", EditorStyles.boldLabel);
+                EditorGUILayout.LabelField(_contentResultTextureSetting, EditorStyles.boldLabel);
 
                 EditorGUILayout.PropertyField(_spFilterMode); // Filter Mode.
-                DrawDesamplingRate(_spDesamplingRate); // Desampling rate.
+                DrawSamplingRate(_spSamplingRate); // Sampling rate.
             }
 
             serializedObject.ApplyModifiedProperties();
@@ -113,166 +182,69 @@ namespace Coffee.UIExtensions.Editors
             // Debug.
             using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
             {
-                GUILayout.Label("Debug");
+                GUILayout.Label(_contentDebug);
 
-                if (GUILayout.Button("Capture", "ButtonLeft"))
+                if (GUILayout.Button(_contentCapture, "ButtonLeft"))
                 {
-                    graphic.Release();
-                    EditorApplication.delayCall += graphic.Capture;
+                    Canvas.willRenderCanvases += Capture;
                 }
 
-                EditorGUI.BeginDisabledGroup(!(target as UIEffectSnapshot).capturedTexture);
-                if (GUILayout.Button("Release", "ButtonRight"))
+                EditorGUI.BeginDisabledGroup(!current.capturedTexture);
+                if (GUILayout.Button(_contentRelease, "ButtonRight"))
                 {
-                    graphic.Release();
+                    current.Release();
                 }
 
                 EditorGUI.EndDisabledGroup();
             }
         }
 
-        //################################
-        // Private Members.
-        //################################
-        const int Bits4 = (1 << 4) - 1;
-        const int Bits2 = (1 << 2) - 1;
-        bool _customAdvancedOption = false;
-        SerializedProperty _spTexture;
-        SerializedProperty _spColor;
-        SerializedProperty _spRaycastTarget;
-        SerializedProperty _spDesamplingRate;
-        SerializedProperty _spReductionRate;
-        SerializedProperty _spFilterMode;
-        SerializedProperty _spBlurMode;
-        SerializedProperty _spIterations;
-        SerializedProperty _spKeepSizeToRootCanvas;
-        SerializedProperty _spCaptureOnEnable;
-        SerializedProperty _spGlobalMode;
+        private void Capture()
+        {
+            Canvas.willRenderCanvases -= Capture;
+            var current = target as UIEffectSnapshot;
+            if (!current) return;
+            current.Release();
+            current.Capture();
+        }
 
-
-        QualityMode qualityMode
+        private QualityMode qualityMode
         {
             get
             {
                 if (_customAdvancedOption)
                     return QualityMode.Custom;
 
-                int qualityValue = (_spDesamplingRate.intValue << 0)
+                var qualityValue = (_spSamplingRate.intValue << 0)
                                    + (_spReductionRate.intValue << 4)
                                    + (_spFilterMode.intValue << 8)
-                                   + (_spIterations.intValue << 10);
+                                   + (_spBlurIterations.intValue << 10);
 
                 return System.Enum.IsDefined(typeof(QualityMode), qualityValue) ? (QualityMode) qualityValue : QualityMode.Custom;
             }
             set
             {
-                if (value != QualityMode.Custom)
-                {
-                    int qualityValue = (int) value;
-                    _spDesamplingRate.intValue = (qualityValue >> 0) & Bits4;
-                    _spReductionRate.intValue = (qualityValue >> 4) & Bits4;
-                    _spFilterMode.intValue = (qualityValue >> 8) & Bits2;
-                    _spIterations.intValue = (qualityValue >> 10) & Bits4;
-                }
+                if (value == QualityMode.Custom) return;
+
+                var qualityValue = (int) value;
+                _spSamplingRate.intValue = (qualityValue >> 0) & Bits4;
+                _spReductionRate.intValue = (qualityValue >> 4) & Bits4;
+                _spFilterMode.intValue = (qualityValue >> 8) & Bits2;
+                _spBlurIterations.intValue = (qualityValue >> 10) & Bits4;
             }
         }
 
         /// <summary>
-        /// Draws the desampling rate.
+        /// Draws the Sampling rate.
         /// </summary>
-        void DrawDesamplingRate(SerializedProperty sp)
+        private static void DrawSamplingRate(SerializedProperty sp)
         {
             using (new EditorGUILayout.HorizontalScope())
             {
                 EditorGUILayout.PropertyField(sp);
                 int w, h;
-                (target as UIEffectSnapshot).GetDesamplingSize((DesamplingRate) sp.intValue, out w, out h);
+                UIEffectSnapshotProcesser.GetSamplingSize((SamplingRate) sp.intValue, out w, out h);
                 GUILayout.Label(string.Format("{0}x{1}", w, h), EditorStyles.miniLabel);
-            }
-        }
-
-        /// <summary>
-        /// Draw effect properties.
-        /// </summary>
-        void DrawEffectProperties(SerializedObject serializedObject, string colorProperty = "m_Color")
-        {
-            //================
-            // Effect setting.
-            //================
-            var spToneMode = serializedObject.FindProperty("m_EffectMode");
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(spToneMode);
-            if (EditorGUI.EndChangeCheck())
-            {
-                (target as UIEffectSnapshot).SetEffectMaterialDirty();
-            }
-
-            // When tone is enable, show parameters.
-            if (spToneMode.intValue != (int) UIEffectSnapshot.EffectMode.None)
-            {
-                EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("m_EffectFactor"));
-                EditorGUI.indentLevel--;
-            }
-
-            //================
-            // Color setting.
-            //================
-            var spColorMode = serializedObject.FindProperty("m_ColorMode");
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(spColorMode);
-            if (EditorGUI.EndChangeCheck())
-            {
-                (target as UIEffectSnapshot).SetEffectMaterialDirty();
-            }
-
-            // When color is enable, show parameters.
-            //if (spColorMode.intValue != (int)ColorMode.Multiply)
-            {
-                EditorGUI.indentLevel++;
-
-                SerializedProperty spColor = serializedObject.FindProperty(colorProperty);
-
-                EditorGUI.BeginChangeCheck();
-                EditorGUI.showMixedValue = spColor.hasMultipleDifferentValues;
-#if UNITY_2018_1_OR_NEWER
-                spColor.colorValue = EditorGUILayout.ColorField(contentEffectColor, spColor.colorValue, true, false, false);
-#else
-				spColor.colorValue = EditorGUILayout.ColorField (contentEffectColor, spColor.colorValue, true, false, false, null);
-#endif
-                if (EditorGUI.EndChangeCheck())
-                {
-                    spColor.serializedObject.ApplyModifiedProperties();
-                }
-
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("m_ColorFactor"));
-                EditorGUI.indentLevel--;
-            }
-
-            //================
-            // Blur setting.
-            //================
-            var spBlurMode = serializedObject.FindProperty("m_BlurMode");
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(spBlurMode);
-            if (EditorGUI.EndChangeCheck())
-            {
-                (target as UIEffectSnapshot).SetEffectMaterialDirty();
-            }
-
-            // When blur is enable, show parameters.
-            if (spBlurMode.intValue != (int) UIEffectSnapshot.BlurMode.None)
-            {
-                EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("m_BlurFactor"));
-
-                var spAdvancedBlur = serializedObject.FindProperty("m_AdvancedBlur");
-                if (spAdvancedBlur != null)
-                {
-                    EditorGUILayout.PropertyField(spAdvancedBlur);
-                }
-
-                EditorGUI.indentLevel--;
             }
         }
     }

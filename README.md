@@ -1,8 +1,9 @@
-UIEffect - Snapshot
+UIEffect Snapshot
 ===
 
-Let's take a snapshot of a specific frame with effect, and display it.  
-The effect is non-realtime, light-weight, less-camera, but be effective enough.
+Capture a snapshot with effect and display it.  
+The effect is non-realtime, light-weight, less-camera, but be effective enough.  
+The captured snapshot can be used as a background for a dialog or window.
 
 [![](https://img.shields.io/npm/v/com.coffee.ui-effect-snapshot?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.coffee.ui-effect-snapshot/)
 [![](https://img.shields.io/github/v/release/mob-sakai/UIEffectSnapshot?include_prereleases)](https://github.com/mob-sakai/UIEffectSnapshot/releases)
@@ -13,7 +14,7 @@ The effect is non-realtime, light-weight, less-camera, but be effective enough.
 [![](https://img.shields.io/twitter/follow/mob_sakai.svg?label=Follow&style=social)](https://twitter.com/intent/follow?screen_name=mob_sakai)
 
 
-<< [Description](#Description) | [Demo](#demo) | [Installation](#installation) | [Usage](#usage) | [Change log](https://github.com/mob-sakai/UIEffectSnapshot/blob/upm/CHANGELOG.md) >>
+<< [Description](#description) | [Demo](#demo) | [Installation](#installation) | [Usage](#usage) | [Change log](https://github.com/mob-sakai/UIEffectSnapshot/blob/upm/CHANGELOG.md) >>
 
 
 
@@ -21,17 +22,35 @@ The effect is non-realtime, light-weight, less-camera, but be effective enough.
 
 ## Description
 
+Capture a screenshot with effect and display it.  
+The effect is non-realtime, light-weight, less-camera, but be effective enough.  
+The captured snapshot can be used as a background for a dialog or window.
+
+![](https://user-images.githubusercontent.com/12690315/94373370-0e09f380-0140-11eb-83f9-ab73b22f8b14.gif)
+
+### Features
+
+
+* Effect Mode: Grayscale, Sepia, Nega, Pixelation
+* Color Mode: Multiply, Fill, Additive, Subtract
+* Blur Mode: Fast Blur, Medium Blur, Detail Blur
+* Global Mode: 
+* Capture On Enable: When the component is enable, capture screen automatically.
+* Fit to screen: Fit the RectTransform to the screen.
+* Quality Mode: Fast, Medium, Detail, Custom
+  * Down-sampling Rate: None, x1, x2, x4, x8
+  * Reduction Rate: None, x1, x2, x4, x8
+  * Blur Iterations: 1 - 8 times
+  * Filter Mode: Point, Bilinear, Trilinear
 
 
 <br><br><br><br>
 
 ## Demo
 
-* [WebGL Demo](http://mob-sakai.github.io/UIEffectSnapshot)
+* [WebGL Demo](https://mob-sakai.github.io/Demos/UIEffectSnapshot)
 
-![](https://user-images.githubusercontent.com/12690315/91664766-3e07ac00-eb2c-11ea-978b-ef723be80619.gif)
-
-
+![](https://user-images.githubusercontent.com/12690315/94373370-0e09f380-0140-11eb-83f9-ab73b22f8b14.gif)
 
 <br><br><br><br>
 
@@ -73,7 +92,13 @@ Or, use [UpmGitExtension](https://github.com/mob-sakai/UpmGitExtension) to insta
 
 ## Usage
 
+![](https://user-images.githubusercontent.com/12690315/94373459-b0c27200-0140-11eb-9d88-237873539a16.png)
 
+### Capture from script
+
+### Example: A window with blurred background
+
+### Example: Blurred window
 
 <br><br><br><br>
 
