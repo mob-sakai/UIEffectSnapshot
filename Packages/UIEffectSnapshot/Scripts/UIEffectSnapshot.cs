@@ -39,7 +39,7 @@ namespace Coffee.UIExtensions
         /// </summary>
         public RenderTexture capturedTexture
         {
-            get { return m_GlobalMode ? UIEffectSnapshotProcesser.instance.globalRenderTexture : request.renderTexture; }
+            get { return m_GlobalMode ? UIEffectSnapshotProcesser.instance.globalCapturedTexture : request.renderTexture; }
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Coffee.UIExtensions
         /// </summary>
         public RenderTexture globalCapturedTexture
         {
-            get { return UIEffectSnapshotProcesser.instance.globalRenderTexture; }
+            get { return UIEffectSnapshotProcesser.instance.globalCapturedTexture; }
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Coffee.UIExtensions
             // Global mode.
             if (m_GlobalMode && Application.isPlaying)
             {
-                texture = UIEffectSnapshotProcesser.instance.globalRenderTexture;
+                texture = UIEffectSnapshotProcesser.instance.globalCapturedTexture;
             }
 
             FitToScreen(); // Fit to screen.

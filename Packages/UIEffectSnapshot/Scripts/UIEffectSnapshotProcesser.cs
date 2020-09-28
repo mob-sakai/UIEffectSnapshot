@@ -19,7 +19,7 @@ namespace Coffee.UIExtensions
         private static int s_EffectId2;
         private static int s_EffectFactorId;
         private static int s_ColorFactorId;
-        private static RenderTexture _globalRt;
+        private static RenderTexture s_GlobalRt;
         private static Shader s_EffectShader;
 
 
@@ -59,7 +59,10 @@ namespace Coffee.UIExtensions
             }
         }
 
-        public RenderTexture globalRenderTexture { get; set; }
+        public RenderTexture globalCapturedTexture
+        {
+            get { return s_GlobalRt; }
+        }
 
         private static UIEffectSnapshotProcesser Create()
         {
@@ -170,7 +173,7 @@ namespace Coffee.UIExtensions
             // If size of result RT has changed, release it.
             int w, h;
             GetSamplingSize(request.samplingRate, out w, out h);
-            var rt = request.globalMode ? _globalRt : request.renderTexture;
+            var rt = request.globalMode ? s_GlobalRt : request.renderTexture;
             if (rt && (rt.width != w || rt.height != h))
             {
                 RenderTexture.ReleaseTemporary(rt);
@@ -187,7 +190,7 @@ namespace Coffee.UIExtensions
 
                 if (request.globalMode)
                 {
-                    _globalRt = rt;
+                    s_GlobalRt = rt;
                 }
 
                 request.renderTexture = rt;
