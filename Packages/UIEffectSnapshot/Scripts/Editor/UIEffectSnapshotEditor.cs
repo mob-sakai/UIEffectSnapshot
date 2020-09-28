@@ -38,6 +38,7 @@ namespace Coffee.UIExtensions.Editors
         private SerializedProperty _spTexture;
         private SerializedProperty _spColor;
         private SerializedProperty _spRayCastTarget;
+        private SerializedProperty _spMaskable;
         private SerializedProperty _spSamplingRate;
         private SerializedProperty _spReductionRate;
         private SerializedProperty _spFilterMode;
@@ -63,6 +64,8 @@ namespace Coffee.UIExtensions.Editors
             _spTexture = serializedObject.FindProperty("m_Texture");
             _spColor = serializedObject.FindProperty("m_Color");
             _spRayCastTarget = serializedObject.FindProperty("m_RaycastTarget");
+            _spMaskable = serializedObject.FindProperty("m_Maskable");
+
             _spFitToScreen = serializedObject.FindProperty("m_FitToScreen");
             _spCaptureOnEnable = serializedObject.FindProperty("m_CaptureOnEnable");
             _spGlobalMode = serializedObject.FindProperty("m_GlobalMode");
@@ -101,6 +104,7 @@ namespace Coffee.UIExtensions.Editors
             EditorGUILayout.PropertyField(_spTexture);
             EditorGUILayout.PropertyField(_spColor);
             EditorGUILayout.PropertyField(_spRayCastTarget);
+            EditorGUILayout.PropertyField(_spMaskable);
 
             GUILayout.Space(10);
             EditorGUILayout.LabelField(_contentCaptureEffect, EditorStyles.boldLabel);

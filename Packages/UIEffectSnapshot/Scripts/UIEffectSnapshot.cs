@@ -17,6 +17,9 @@ namespace Coffee.UIExtensions
     {
         [SerializeField] UIEffectSnapshotRequest m_Request = new UIEffectSnapshotRequest();
 
+
+        [SerializeField] private bool m_Maskable = true;
+
         [Tooltip("Fits graphic size to screen on captured.")] [SerializeField]
         bool m_FitToScreen = true;
 
@@ -82,6 +85,7 @@ namespace Coffee.UIExtensions
         /// </summary>
         protected override void OnEnable()
         {
+            maskable = m_Maskable;
             base.OnEnable();
 
             // Capture on enable.
@@ -121,6 +125,12 @@ namespace Coffee.UIExtensions
             {
                 RenderTexture.ReleaseTemporary(request.renderTexture);
             }
+        }
+
+        protected override void UpdateMaterial()
+        {
+            m_Maskable = maskable;
+            base.UpdateMaterial();
         }
 
         /// <summary>
@@ -245,6 +255,12 @@ namespace Coffee.UIExtensions
             request.samplingRate = UIEffectSnapshotRequest.SamplingRate.x1;
             request.reductionRate = UIEffectSnapshotRequest.SamplingRate.x1;
             base.Reset();
+        }
+
+        protected override void OnValidate()
+        {
+            maskable = m_Maskable;
+            base.OnValidate();
         }
 #endif
     }
