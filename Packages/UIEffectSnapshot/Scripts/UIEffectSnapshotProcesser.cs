@@ -87,7 +87,7 @@ namespace Coffee.UIExtensions
             s_Requests.Add(request);
         }
 
-        private void Awake()
+        private void OnEnable()
         {
             // Cache some ids.
             if (s_CopyId == 0)
