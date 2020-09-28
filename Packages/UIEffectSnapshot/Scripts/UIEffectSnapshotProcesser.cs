@@ -72,7 +72,12 @@ namespace Coffee.UIExtensions
                 hideFlags = HideFlags.HideAndDontSave,
             };
 
-            DontDestroyOnLoad(gameObject);
+#if UNITY_EDITOR
+            if (Application.isPlaying)
+#endif
+            {
+                DontDestroyOnLoad(gameObject);
+            }
             var inst = gameObject.AddComponent<UIEffectSnapshotProcesser>();
             return inst;
         }
