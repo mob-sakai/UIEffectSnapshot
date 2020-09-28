@@ -190,7 +190,7 @@ namespace Coffee.UIExtensions.Editors
 
                 if (GUILayout.Button(_contentCapture, "ButtonLeft"))
                 {
-                    Canvas.willRenderCanvases += Capture;
+                    current.Capture();
                 }
 
                 EditorGUI.BeginDisabledGroup(!current.capturedTexture);
@@ -201,15 +201,6 @@ namespace Coffee.UIExtensions.Editors
 
                 EditorGUI.EndDisabledGroup();
             }
-        }
-
-        private void Capture()
-        {
-            Canvas.willRenderCanvases -= Capture;
-            var current = target as UIEffectSnapshot;
-            if (!current) return;
-            current.Release();
-            current.Capture();
         }
 
         private QualityMode qualityMode
