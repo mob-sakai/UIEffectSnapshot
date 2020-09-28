@@ -1,3 +1,11 @@
+# [1.0.0-preview.4](https://github.com/mob-sakai/UIEffectSnapshot/compare/v1.0.0-preview.3...v1.0.0-preview.4) (2020-09-28)
+
+
+### Bug Fixes
+
+* do not destroy on load ([1f599c7](https://github.com/mob-sakai/UIEffectSnapshot/commit/1f599c7324ecf3d850f16031304d8850434b8334))
+* global captured texture property is incorrect ([9bdcd6a](https://github.com/mob-sakai/UIEffectSnapshot/commit/9bdcd6ab3c5942098180e6360f80d25dd4f99489))
+
 # [1.0.0-preview.3](https://github.com/mob-sakai/UIEffectSnapshot/compare/v1.0.0-preview.2...v1.0.0-preview.3) (2020-09-27)
 
 
