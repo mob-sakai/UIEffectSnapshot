@@ -69,8 +69,7 @@ namespace Coffee.UIExtensions
                 hideFlags = HideFlags.HideAndDontSave,
             };
 
-            // This camera object is just for internal use
-
+            DontDestroyOnLoad(gameObject);
             var inst = gameObject.AddComponent<UIEffectSnapshotProcesser>();
             return inst;
         }
