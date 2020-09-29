@@ -139,7 +139,7 @@ namespace Coffee.UIExtensions
         /// <summary>
         /// Gets the size of the Sampling.
         /// </summary>
-        public static void GetSamplingSize(UIEffectSnapshotRequest.SamplingRate rate, out int w, out int h)
+        public static void GetSamplingSize(UIEffectSnapshotRequest.DownSamplingRate rate, out int w, out int h)
         {
 #if UNITY_EDITOR
             if (!Application.isPlaying)
@@ -155,7 +155,7 @@ namespace Coffee.UIExtensions
                 h = Screen.height;
             }
 
-            if (rate == UIEffectSnapshotRequest.SamplingRate.None)
+            if (rate == UIEffectSnapshotRequest.DownSamplingRate.None)
                 return;
 
             var aspect = (float) w / h;
@@ -178,7 +178,7 @@ namespace Coffee.UIExtensions
         {
             // If size of result RT has changed, release it.
             int w, h;
-            GetSamplingSize(request.samplingRate, out w, out h);
+            GetSamplingSize(request.downSamplingRate, out w, out h);
             var rt = request.globalMode ? s_GlobalRt : request.renderTexture;
             if (rt && (rt.width != w || rt.height != h))
             {
@@ -191,7 +191,7 @@ namespace Coffee.UIExtensions
             {
                 rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default);
                 rt.filterMode = request.filterMode;
-                rt.useMipMap = false;
+                rt.autoGenerateMips = false;
                 rt.wrapMode = TextureWrapMode.Clamp;
 
                 if (request.globalMode)
@@ -210,7 +210,7 @@ namespace Coffee.UIExtensions
         {
             // [1] Capture from back buffer (back buffer -> copied screen).
             int w, h;
-            GetSamplingSize(UIEffectSnapshotRequest.SamplingRate.None, out w, out h);
+            GetSamplingSize(UIEffectSnapshotRequest.DownSamplingRate.None, out w, out h);
 
             var cb = request.commandBuffer = new CommandBuffer();
             cb.GetTemporaryRT(s_CopyId, w, h, 0, request.filterMode);

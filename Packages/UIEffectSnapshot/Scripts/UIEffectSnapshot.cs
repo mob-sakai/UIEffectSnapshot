@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using SamplingRate = Coffee.UIExtensions.UIEffectSnapshotRequest.SamplingRate;
+using DownSamplingRate = Coffee.UIExtensions.UIEffectSnapshotRequest.DownSamplingRate;
 using EffectMode = Coffee.UIExtensions.UIEffectSnapshotRequest.EffectMode;
 using ColorMode = Coffee.UIExtensions.UIEffectSnapshotRequest.ColorMode;
 using BlurMode = Coffee.UIExtensions.UIEffectSnapshotRequest.BlurMode;
@@ -185,7 +184,7 @@ namespace Coffee.UIExtensions
             EffectMode effectMode = EffectMode.None, float effectFactor = 1f,
             ColorMode colorMode = ColorMode.Multiply, float colorFactor = 1f, Color effectColor = default(Color),
             BlurMode blurMode = BlurMode.FastBlur, float blurFactor = 1f, int blurIterations = 2,
-            SamplingRate samplingRate = SamplingRate.x2, SamplingRate reductionRate = SamplingRate.x2, FilterMode filterMode = FilterMode.Bilinear,
+            DownSamplingRate samplingRate = DownSamplingRate.x2, DownSamplingRate reductionRate = DownSamplingRate.x2, FilterMode filterMode = FilterMode.Bilinear,
             Action<UIEffectSnapshotRequest> callback = null
         )
         {
@@ -202,7 +201,7 @@ namespace Coffee.UIExtensions
                 blurMode = blurMode,
                 blurFactor = blurFactor,
                 blurIterations = blurIterations,
-                samplingRate = samplingRate,
+                downSamplingRate = samplingRate,
                 reductionRate = reductionRate,
                 filterMode = filterMode,
             };
@@ -250,7 +249,6 @@ namespace Coffee.UIExtensions
             var rt = request.renderTexture;
             if (!rt) return;
 
-            // rt.Release();
             RenderTexture.ReleaseTemporary(rt);
             request.renderTexture = null;
             texture = null;
@@ -268,8 +266,8 @@ namespace Coffee.UIExtensions
         {
             request.blurIterations = 3;
             request.filterMode = FilterMode.Bilinear;
-            request.samplingRate = UIEffectSnapshotRequest.SamplingRate.x1;
-            request.reductionRate = UIEffectSnapshotRequest.SamplingRate.x1;
+            request.downSamplingRate = UIEffectSnapshotRequest.DownSamplingRate.x1;
+            request.reductionRate = UIEffectSnapshotRequest.DownSamplingRate.x1;
             base.Reset();
         }
 
