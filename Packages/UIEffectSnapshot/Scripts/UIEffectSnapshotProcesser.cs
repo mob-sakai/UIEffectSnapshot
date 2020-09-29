@@ -84,7 +84,8 @@ namespace Coffee.UIExtensions
 
         public void Register(UIEffectSnapshotRequest request)
         {
-            s_Requests.Add(request);
+            if (request != null && !s_Requests.Contains(request))
+                s_Requests.Add(request);
         }
 
         private void OnEnable()
