@@ -44,7 +44,7 @@ namespace Coffee.UIExtensions
         /// </summary>
         public RenderTexture capturedTexture
         {
-            get { return m_GlobalMode ? UIEffectSnapshotProcesser.instance.globalCapturedTexture : request.renderTexture; }
+            get { return m_GlobalMode ? UIEffectSnapshotUpdater.instance.globalCapturedTexture : request.renderTexture; }
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Coffee.UIExtensions
         /// </summary>
         public RenderTexture globalCapturedTexture
         {
-            get { return UIEffectSnapshotProcesser.instance.globalCapturedTexture; }
+            get { return UIEffectSnapshotUpdater.instance.globalCapturedTexture; }
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Coffee.UIExtensions
             // Global mode.
             if (m_GlobalMode && Application.isPlaying)
             {
-                texture = UIEffectSnapshotProcesser.instance.globalCapturedTexture;
+                texture = UIEffectSnapshotUpdater.instance.globalCapturedTexture;
             }
 
             FitToScreen(); // Fit to screen.
@@ -178,7 +178,7 @@ namespace Coffee.UIExtensions
             request.globalMode = true;
             if (callback != null)
                 request.postAction += callback;
-            UIEffectSnapshotProcesser.instance.Register(request);
+            UIEffectSnapshotUpdater.instance.Register(request);
         }
 
         public static void CaptureForGlobal(
@@ -228,7 +228,7 @@ namespace Coffee.UIExtensions
                 };
 #endif
             };
-            UIEffectSnapshotProcesser.instance.Register(request);
+            UIEffectSnapshotUpdater.instance.Register(request);
         }
 
 

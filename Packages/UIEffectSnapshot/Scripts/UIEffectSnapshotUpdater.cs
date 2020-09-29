@@ -10,9 +10,9 @@ namespace Coffee.UIExtensions
 {
     [ExecuteAlways]
     [AddComponentMenu("")]
-    internal class UIEffectSnapshotProcesser : MonoBehaviour
+    internal class UIEffectSnapshotUpdater : MonoBehaviour
     {
-        static UIEffectSnapshotProcesser s_Instance;
+        static UIEffectSnapshotUpdater s_Instance;
         private readonly List<UIEffectSnapshotRequest> s_Requests = new List<UIEffectSnapshotRequest>();
         private static int s_CopyId;
         private static int s_EffectId1;
@@ -24,9 +24,9 @@ namespace Coffee.UIExtensions
 
 
 #if UNITY_2018_3_OR_NEWER && UNITY_EDITOR
-        static UIEffectSnapshotProcesser s_InstanceForPrefab;
+        static UIEffectSnapshotUpdater s_InstanceForPrefab;
 
-        private static UIEffectSnapshotProcesser InstanceForPrefab
+        private static UIEffectSnapshotUpdater InstanceForPrefab
         {
             get
             {
@@ -44,7 +44,7 @@ namespace Coffee.UIExtensions
         }
 #endif
 
-        public static UIEffectSnapshotProcesser instance
+        public static UIEffectSnapshotUpdater instance
         {
             get
             {
@@ -55,7 +55,7 @@ namespace Coffee.UIExtensions
                 // Find instance in scene, or create new one.
                 return s_Instance
                     ? s_Instance
-                    : (s_Instance = FindObjectOfType<UIEffectSnapshotProcesser>() ?? Create());
+                    : (s_Instance = FindObjectOfType<UIEffectSnapshotUpdater>() ?? Create());
             }
         }
 
@@ -64,11 +64,11 @@ namespace Coffee.UIExtensions
             get { return s_GlobalRt; }
         }
 
-        private static UIEffectSnapshotProcesser Create()
+        private static UIEffectSnapshotUpdater Create()
         {
             var gameObject = new GameObject()
             {
-                name = typeof(UIEffectSnapshotProcesser).Name,
+                name = typeof(UIEffectSnapshotUpdater).Name,
                 hideFlags = HideFlags.HideAndDontSave,
             };
 
@@ -78,7 +78,7 @@ namespace Coffee.UIExtensions
             {
                 DontDestroyOnLoad(gameObject);
             }
-            var inst = gameObject.AddComponent<UIEffectSnapshotProcesser>();
+            var inst = gameObject.AddComponent<UIEffectSnapshotUpdater>();
             return inst;
         }
 

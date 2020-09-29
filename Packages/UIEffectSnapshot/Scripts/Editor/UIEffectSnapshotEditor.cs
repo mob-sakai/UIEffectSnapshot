@@ -238,7 +238,7 @@ namespace Coffee.UIExtensions.Editors
             {
                 EditorGUILayout.PropertyField(sp);
                 int w, h;
-                UIEffectSnapshotProcesser.GetSamplingSize((SamplingRate) sp.intValue, out w, out h);
+                UIEffectSnapshotUpdater.GetSamplingSize((SamplingRate) sp.intValue, out w, out h);
                 GUILayout.Label(string.Format("{0}x{1}", w, h), EditorStyles.miniLabel);
             }
         }
