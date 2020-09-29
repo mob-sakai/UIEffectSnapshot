@@ -42,9 +42,9 @@ namespace Coffee.UIExtensions
         }
 
         /// <summary>
-        /// Sampling rate.
+        /// Down sampling rate.
         /// </summary>
-        public enum SamplingRate
+        public enum DownSamplingRate
         {
             None = 0,
             x1 = 1,
@@ -78,11 +78,11 @@ namespace Coffee.UIExtensions
         [Tooltip("Blur iterations.")] [SerializeField] [Range(1, 8)]
         int m_BlurIterations = 2;
 
-        [Tooltip("Desampling rate of the generated RenderTexture.")] [SerializeField]
-        SamplingRate m_SamplingRate = SamplingRate.x2;
+        [Tooltip("Down sampling rate of the generated RenderTexture.")] [SerializeField]
+        DownSamplingRate m_DownSamplingRate = DownSamplingRate.x2;
 
-        [Tooltip("Desampling rate of reduction buffer to apply effect.")] [SerializeField]
-        SamplingRate m_ReductionRate = SamplingRate.x2;
+        [Tooltip("Down sampling rate of reduction buffer to apply effect.")] [SerializeField]
+        DownSamplingRate m_ReductionRate = DownSamplingRate.x2;
 
         [Tooltip("FilterMode for capturing.")] [SerializeField]
         FilterMode m_FilterMode = FilterMode.Bilinear;
@@ -161,18 +161,18 @@ namespace Coffee.UIExtensions
         }
 
         /// <summary>
-        /// Desampling rate of the generated RenderTexture.
+        /// Down sampling rate of the generated RenderTexture.
         /// </summary>
-        public SamplingRate samplingRate
+        public DownSamplingRate downSamplingRate
         {
-            get { return m_SamplingRate; }
-            set { m_SamplingRate = value; }
+            get { return m_DownSamplingRate; }
+            set { m_DownSamplingRate = value; }
         }
 
         /// <summary>
-        /// Desampling rate of reduction buffer to apply effect.
+        /// Down sampling rate of reduction buffer to apply effect.
         /// </summary>
-        public SamplingRate reductionRate
+        public DownSamplingRate reductionRate
         {
             get { return m_ReductionRate; }
             set { m_ReductionRate = value; }

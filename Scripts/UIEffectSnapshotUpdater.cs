@@ -10,9 +10,9 @@ namespace Coffee.UIExtensions
 {
     [ExecuteAlways]
     [AddComponentMenu("")]
-    internal class UIEffectSnapshotProcesser : MonoBehaviour
+    internal class UIEffectSnapshotUpdater : MonoBehaviour
     {
-        static UIEffectSnapshotProcesser s_Instance;
+        static UIEffectSnapshotUpdater s_Instance;
         private readonly List<UIEffectSnapshotRequest> s_Requests = new List<UIEffectSnapshotRequest>();
         private static int s_CopyId;
         private static int s_EffectId1;
@@ -24,9 +24,9 @@ namespace Coffee.UIExtensions
 
 
 #if UNITY_2018_3_OR_NEWER && UNITY_EDITOR
-        static UIEffectSnapshotProcesser s_InstanceForPrefab;
+        static UIEffectSnapshotUpdater s_InstanceForPrefab;
 
-        private static UIEffectSnapshotProcesser InstanceForPrefab
+        private static UIEffectSnapshotUpdater InstanceForPrefab
         {
             get
             {
@@ -44,7 +44,7 @@ namespace Coffee.UIExtensions
         }
 #endif
 
-        public static UIEffectSnapshotProcesser instance
+        public static UIEffectSnapshotUpdater instance
         {
             get
             {
@@ -55,7 +55,7 @@ namespace Coffee.UIExtensions
                 // Find instance in scene, or create new one.
                 return s_Instance
                     ? s_Instance
-                    : (s_Instance = FindObjectOfType<UIEffectSnapshotProcesser>() ?? Create());
+                    : (s_Instance = FindObjectOfType<UIEffectSnapshotUpdater>() ?? Create());
             }
         }
 
@@ -64,25 +64,31 @@ namespace Coffee.UIExtensions
             get { return s_GlobalRt; }
         }
 
-        private static UIEffectSnapshotProcesser Create()
+        private static UIEffectSnapshotUpdater Create()
         {
             var gameObject = new GameObject()
             {
-                name = typeof(UIEffectSnapshotProcesser).Name,
+                name = typeof(UIEffectSnapshotUpdater).Name,
                 hideFlags = HideFlags.HideAndDontSave,
             };
 
-            DontDestroyOnLoad(gameObject);
-            var inst = gameObject.AddComponent<UIEffectSnapshotProcesser>();
+#if UNITY_EDITOR
+            if (Application.isPlaying)
+#endif
+            {
+                DontDestroyOnLoad(gameObject);
+            }
+            var inst = gameObject.AddComponent<UIEffectSnapshotUpdater>();
             return inst;
         }
 
         public void Register(UIEffectSnapshotRequest request)
         {
-            s_Requests.Add(request);
+            if (request != null && !s_Requests.Contains(request))
+                s_Requests.Add(request);
         }
 
-        private void Awake()
+        private void OnEnable()
         {
             // Cache some ids.
             if (s_CopyId == 0)
@@ -133,7 +139,7 @@ namespace Coffee.UIExtensions
         /// <summary>
         /// Gets the size of the Sampling.
         /// </summary>
-        public static void GetSamplingSize(UIEffectSnapshotRequest.SamplingRate rate, out int w, out int h)
+        public static void GetSamplingSize(UIEffectSnapshotRequest.DownSamplingRate rate, out int w, out int h)
         {
 #if UNITY_EDITOR
             if (!Application.isPlaying)
@@ -149,7 +155,7 @@ namespace Coffee.UIExtensions
                 h = Screen.height;
             }
 
-            if (rate == UIEffectSnapshotRequest.SamplingRate.None)
+            if (rate == UIEffectSnapshotRequest.DownSamplingRate.None)
                 return;
 
             var aspect = (float) w / h;
@@ -172,7 +178,7 @@ namespace Coffee.UIExtensions
         {
             // If size of result RT has changed, release it.
             int w, h;
-            GetSamplingSize(request.samplingRate, out w, out h);
+            GetSamplingSize(request.downSamplingRate, out w, out h);
             var rt = request.globalMode ? s_GlobalRt : request.renderTexture;
             if (rt && (rt.width != w || rt.height != h))
             {
@@ -185,7 +191,7 @@ namespace Coffee.UIExtensions
             {
                 rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default);
                 rt.filterMode = request.filterMode;
-                rt.useMipMap = false;
+                rt.autoGenerateMips = false;
                 rt.wrapMode = TextureWrapMode.Clamp;
 
                 if (request.globalMode)
@@ -204,7 +210,7 @@ namespace Coffee.UIExtensions
         {
             // [1] Capture from back buffer (back buffer -> copied screen).
             int w, h;
-            GetSamplingSize(UIEffectSnapshotRequest.SamplingRate.None, out w, out h);
+            GetSamplingSize(UIEffectSnapshotRequest.DownSamplingRate.None, out w, out h);
 
             var cb = request.commandBuffer = new CommandBuffer();
             cb.GetTemporaryRT(s_CopyId, w, h, 0, request.filterMode);
@@ -284,10 +290,16 @@ namespace Coffee.UIExtensions
 #endif
             {
                 // Execute command buffer.
-                Graphics.ExecuteCommandBuffer(request.commandBuffer);
+                if (request.commandBuffer != null)
+                    Graphics.ExecuteCommandBuffer(request.commandBuffer);
             }
 
-            request.commandBuffer.Release();
+            if (request.commandBuffer != null)
+            {
+                request.commandBuffer.Release();
+                request.commandBuffer = null;
+            }
+
             if (request.postAction != null)
                 request.postAction(request);
         }

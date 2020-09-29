@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
-using SamplingRate = Coffee.UIExtensions.UIEffectSnapshotRequest.SamplingRate;
+using DownSamplingRate = Coffee.UIExtensions.UIEffectSnapshotRequest.DownSamplingRate;
 using EffectMode = Coffee.UIExtensions.UIEffectSnapshotRequest.EffectMode;
 using ColorMode = Coffee.UIExtensions.UIEffectSnapshotRequest.ColorMode;
 using BlurMode = Coffee.UIExtensions.UIEffectSnapshotRequest.BlurMode;
@@ -16,6 +17,9 @@ namespace Coffee.UIExtensions
     public class UIEffectSnapshot : RawImage
     {
         [SerializeField] UIEffectSnapshotRequest m_Request = new UIEffectSnapshotRequest();
+
+
+        [SerializeField] private bool m_Maskable = true;
 
         [Tooltip("Fits graphic size to screen on captured.")] [SerializeField]
         bool m_FitToScreen = true;
@@ -39,7 +43,7 @@ namespace Coffee.UIExtensions
         /// </summary>
         public RenderTexture capturedTexture
         {
-            get { return m_GlobalMode ? UIEffectSnapshotProcesser.instance.globalCapturedTexture : request.renderTexture; }
+            get { return m_GlobalMode ? UIEffectSnapshotUpdater.instance.globalCapturedTexture : request.renderTexture; }
         }
 
         /// <summary>
@@ -47,7 +51,7 @@ namespace Coffee.UIExtensions
         /// </summary>
         public RenderTexture globalCapturedTexture
         {
-            get { return UIEffectSnapshotProcesser.instance.globalCapturedTexture; }
+            get { return UIEffectSnapshotUpdater.instance.globalCapturedTexture; }
         }
 
         /// <summary>
@@ -82,6 +86,7 @@ namespace Coffee.UIExtensions
         /// </summary>
         protected override void OnEnable()
         {
+            maskable = m_Maskable;
             base.OnEnable();
 
             // Capture on enable.
@@ -93,7 +98,7 @@ namespace Coffee.UIExtensions
             // Global mode.
             if (m_GlobalMode && Application.isPlaying)
             {
-                texture = UIEffectSnapshotProcesser.instance.globalCapturedTexture;
+                texture = UIEffectSnapshotUpdater.instance.globalCapturedTexture;
             }
 
             FitToScreen(); // Fit to screen.
@@ -123,13 +128,19 @@ namespace Coffee.UIExtensions
             }
         }
 
+        protected override void UpdateMaterial()
+        {
+            m_Maskable = maskable;
+            base.UpdateMaterial();
+        }
+
         /// <summary>
         /// Callback function when a UI element needs to generate vertices.
         /// </summary>
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             // When not displaying, clear vertex.
-            if (texture == null || color.a < 1 / 255f || canvasRenderer.GetAlpha() < 1 / 255f)
+            if (texture == null || color.a < 1 / 255f || canvasRenderer.GetInheritedAlpha() < 1 / 255f)
             {
                 vh.Clear();
             }
@@ -150,8 +161,7 @@ namespace Coffee.UIExtensions
 
         private void FitToScreen()
         {
-            if (!m_FitToScreen) return;
-
+            if (!m_FitToScreen || !canvas) return;
             var rootCanvas = canvas.rootCanvas;
             var rootTransform = rootCanvas.transform as RectTransform;
             var size = rootTransform.rect.size;
@@ -161,17 +171,21 @@ namespace Coffee.UIExtensions
             rectTransform.position = rootTransform.position;
         }
 
-        public static void CaptureForGlobal(UIEffectSnapshotRequest request)
+        public static void CaptureForGlobal(UIEffectSnapshotRequest request, Action<UIEffectSnapshotRequest> callback = null)
         {
+            if (request == null) return;
             request.globalMode = true;
-            UIEffectSnapshotProcesser.instance.Register(request);
+            if (callback != null)
+                request.postAction += callback;
+            UIEffectSnapshotUpdater.instance.Register(request);
         }
 
         public static void CaptureForGlobal(
             EffectMode effectMode = EffectMode.None, float effectFactor = 1f,
             ColorMode colorMode = ColorMode.Multiply, float colorFactor = 1f, Color effectColor = default(Color),
             BlurMode blurMode = BlurMode.FastBlur, float blurFactor = 1f, int blurIterations = 2,
-            SamplingRate samplingRate = SamplingRate.x2, SamplingRate reductionRate = SamplingRate.x2, FilterMode filterMode = FilterMode.Bilinear
+            DownSamplingRate samplingRate = DownSamplingRate.x2, DownSamplingRate reductionRate = DownSamplingRate.x2, FilterMode filterMode = FilterMode.Bilinear,
+            Action<UIEffectSnapshotRequest> callback = null
         )
         {
             if (effectColor == default(Color))
@@ -187,11 +201,11 @@ namespace Coffee.UIExtensions
                 blurMode = blurMode,
                 blurFactor = blurFactor,
                 blurIterations = blurIterations,
-                samplingRate = samplingRate,
+                downSamplingRate = samplingRate,
                 reductionRate = reductionRate,
                 filterMode = filterMode,
             };
-            CaptureForGlobal(request);
+            CaptureForGlobal(request, callback);
         }
 
         /// <summary>
@@ -213,7 +227,18 @@ namespace Coffee.UIExtensions
                 };
 #endif
             };
-            UIEffectSnapshotProcesser.instance.Register(request);
+            UIEffectSnapshotUpdater.instance.Register(request);
+        }
+
+
+        /// <summary>
+        /// Capture rendering result.
+        /// </summary>
+        public void Capture(Action<UIEffectSnapshotRequest> callback)
+        {
+            Capture();
+            if (callback != null)
+                request.postAction += callback;
         }
 
         /// <summary>
@@ -224,7 +249,6 @@ namespace Coffee.UIExtensions
             var rt = request.renderTexture;
             if (!rt) return;
 
-            // rt.Release();
             RenderTexture.ReleaseTemporary(rt);
             request.renderTexture = null;
             texture = null;
@@ -242,9 +266,15 @@ namespace Coffee.UIExtensions
         {
             request.blurIterations = 3;
             request.filterMode = FilterMode.Bilinear;
-            request.samplingRate = UIEffectSnapshotRequest.SamplingRate.x1;
-            request.reductionRate = UIEffectSnapshotRequest.SamplingRate.x1;
+            request.downSamplingRate = UIEffectSnapshotRequest.DownSamplingRate.x1;
+            request.reductionRate = UIEffectSnapshotRequest.DownSamplingRate.x1;
             base.Reset();
+        }
+
+        protected override void OnValidate()
+        {
+            maskable = m_Maskable;
+            base.OnValidate();
         }
 #endif
     }
