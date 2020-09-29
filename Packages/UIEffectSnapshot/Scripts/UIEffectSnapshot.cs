@@ -172,9 +172,12 @@ namespace Coffee.UIExtensions
             rectTransform.position = rootTransform.position;
         }
 
-        public static void CaptureForGlobal(UIEffectSnapshotRequest request)
+        public static void CaptureForGlobal(UIEffectSnapshotRequest request, Action<UIEffectSnapshotRequest> callback = null)
         {
+            if (request == null) return;
             request.globalMode = true;
+            if (callback != null)
+                request.postAction += callback;
             UIEffectSnapshotProcesser.instance.Register(request);
         }
 
@@ -182,7 +185,8 @@ namespace Coffee.UIExtensions
             EffectMode effectMode = EffectMode.None, float effectFactor = 1f,
             ColorMode colorMode = ColorMode.Multiply, float colorFactor = 1f, Color effectColor = default(Color),
             BlurMode blurMode = BlurMode.FastBlur, float blurFactor = 1f, int blurIterations = 2,
-            SamplingRate samplingRate = SamplingRate.x2, SamplingRate reductionRate = SamplingRate.x2, FilterMode filterMode = FilterMode.Bilinear
+            SamplingRate samplingRate = SamplingRate.x2, SamplingRate reductionRate = SamplingRate.x2, FilterMode filterMode = FilterMode.Bilinear,
+            Action<UIEffectSnapshotRequest> callback = null
         )
         {
             if (effectColor == default(Color))
@@ -202,7 +206,7 @@ namespace Coffee.UIExtensions
                 reductionRate = reductionRate,
                 filterMode = filterMode,
             };
-            CaptureForGlobal(request);
+            CaptureForGlobal(request, callback);
         }
 
         /// <summary>
@@ -225,6 +229,17 @@ namespace Coffee.UIExtensions
 #endif
             };
             UIEffectSnapshotProcesser.instance.Register(request);
+        }
+
+
+        /// <summary>
+        /// Capture rendering result.
+        /// </summary>
+        public void Capture(Action<UIEffectSnapshotRequest> callback)
+        {
+            Capture();
+            if (callback != null)
+                request.postAction += callback;
         }
 
         /// <summary>
