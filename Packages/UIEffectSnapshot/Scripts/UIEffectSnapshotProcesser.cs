@@ -289,10 +289,16 @@ namespace Coffee.UIExtensions
 #endif
             {
                 // Execute command buffer.
-                Graphics.ExecuteCommandBuffer(request.commandBuffer);
+                if (request.commandBuffer != null)
+                    Graphics.ExecuteCommandBuffer(request.commandBuffer);
             }
 
-            request.commandBuffer.Release();
+            if (request.commandBuffer != null)
+            {
+                request.commandBuffer.Release();
+                request.commandBuffer = null;
+            }
+
             if (request.postAction != null)
                 request.postAction(request);
         }

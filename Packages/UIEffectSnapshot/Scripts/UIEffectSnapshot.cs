@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 using SamplingRate = Coffee.UIExtensions.UIEffectSnapshotRequest.SamplingRate;
 using EffectMode = Coffee.UIExtensions.UIEffectSnapshotRequest.EffectMode;
@@ -139,7 +141,7 @@ namespace Coffee.UIExtensions
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             // When not displaying, clear vertex.
-            if (texture == null || color.a < 1 / 255f || canvasRenderer.GetAlpha() < 1 / 255f)
+            if (texture == null || color.a < 1 / 255f || canvasRenderer.GetInheritedAlpha() < 1 / 255f)
             {
                 vh.Clear();
             }
@@ -160,8 +162,7 @@ namespace Coffee.UIExtensions
 
         private void FitToScreen()
         {
-            if (!m_FitToScreen) return;
-
+            if (!m_FitToScreen || !canvas) return;
             var rootCanvas = canvas.rootCanvas;
             var rootTransform = rootCanvas.transform as RectTransform;
             var size = rootTransform.rect.size;
