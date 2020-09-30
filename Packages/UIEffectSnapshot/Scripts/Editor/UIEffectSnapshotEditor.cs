@@ -1,5 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.UI;
 using UnityEditorInternal;
@@ -77,7 +77,7 @@ namespace Coffee.UIExtensions.Editors
             _spBlurIterations = r.FindPropertyRelative("m_BlurIterations");
 
             var sp = r.FindPropertyRelative("m_CustomMaterials");
-            _ro = new ReorderableList(sp.serializedObject, sp, false, true, true, true);
+            _ro = new ReorderableList(sp.serializedObject, sp, true, true, true, true);
             _ro.elementHeight = EditorGUIUtility.singleLineHeight + 4;
             _ro.drawElementCallback = (rect, index, active, focused) =>
             {
@@ -108,6 +108,12 @@ namespace Coffee.UIExtensions.Editors
                 }
             };
             _ro.drawHeaderCallback += rect => EditorGUI.LabelField(rect, _contentCustomMaterial);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            _materialArrayEditor.Release();
         }
 
         /// <summary>
@@ -194,6 +200,14 @@ namespace Coffee.UIExtensions.Editors
 
                 EditorGUI.EndDisabledGroup();
             }
+
+            // Draw custom materials.
+            var materials = targets
+                .OfType<UIEffectSnapshot>()
+                .SelectMany(x => x.request.customMaterials)
+                .Where(x => x)
+                .ToArray();
+            _materialArrayEditor.Draw(materials);
         }
 
         /// <summary>
