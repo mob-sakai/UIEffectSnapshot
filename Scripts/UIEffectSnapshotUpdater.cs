@@ -232,37 +232,8 @@ namespace Coffee.UIExtensions
                 cb.Blit(BuiltinRenderTextureType.BindableTexture, s_CopyId);
             }
 
-
-            // Set properties for effect.
-            cb.SetGlobalVector(s_EffectFactorId, new Vector4(request.effectFactor, 0));
-            cb.SetGlobalVector(s_ColorFactorId, new Vector4(request.effectColor.r, request.effectColor.g, request.effectColor.b, request.colorFactor));
-
-            // [2] Apply base effect with reduction buffer (copied screen -> effect1).
-            var mat = GetMaterial(request);
-            GetSamplingSize(request.reductionRate, out w, out h);
-            cb.GetTemporaryRT(s_EffectId1, w, h, 0, request.filterMode);
-            cb.Blit(s_CopyId, s_EffectId1, mat, 0);
-            cb.ReleaseTemporaryRT(s_CopyId);
-
-            // Iterate blurring operation.
-            if (request.blurMode != UIEffectSnapshotRequest.BlurMode.None)
-            {
-                cb.GetTemporaryRT(s_EffectId2, w, h, 0, request.filterMode);
-                for (var i = 0; i < request.blurIterations; i++)
-                {
-                    // [3] Apply blurring with reduction buffer (effect1 -> effect2, or effect2 -> effect1).
-                    cb.SetGlobalVector(s_EffectFactorId, new Vector4(request.blurFactor, 0));
-                    cb.Blit(s_EffectId1, s_EffectId2, mat, 1);
-                    cb.SetGlobalVector(s_EffectFactorId, new Vector4(0, request.blurFactor));
-                    cb.Blit(s_EffectId2, s_EffectId1, mat, 1);
-                }
-
-                cb.ReleaseTemporaryRT(s_EffectId2);
-            }
-
-            // [4] Copy to result RT.
-            cb.Blit(s_EffectId1, new RenderTargetIdentifier(request.renderTexture));
-            cb.ReleaseTemporaryRT(s_EffectId1);
+            // Setup command buffer.
+            SetupCommandBuffer(request, cb);
 
 #if UNITY_EDITOR
             if (!Application.isPlaying)
@@ -276,6 +247,74 @@ namespace Coffee.UIExtensions
 #endif
             // Execute command buffer.
             instance.StartCoroutine(CoUpdateTextureOnNextFrame_Internal(request));
+        }
+
+        private static void SetupCommandBuffer(UIEffectSnapshotRequest request, CommandBuffer cb)
+        {
+            RenderTargetIdentifier src = 0;
+            RenderTargetIdentifier dst = s_CopyId;
+            RenderTargetIdentifier result = new RenderTargetIdentifier(request.renderTexture);
+
+            int w, h;
+            GetSamplingSize(request.reductionRate, out w, out h);
+            cb.GetTemporaryRT(s_EffectId1, w, h, 0, request.filterMode);
+            cb.GetTemporaryRT(s_EffectId2, w, h, 0, request.filterMode);
+
+            // Set properties for effect.
+            cb.SetGlobalVector(s_EffectFactorId, new Vector4(request.effectFactor, 0));
+            cb.SetGlobalVector(s_ColorFactorId, new Vector4(request.effectColor.r, request.effectColor.g, request.effectColor.b, request.colorFactor));
+
+            // [2] Apply base effect with reduction buffer (copied screen -> effect1).
+            var mat = GetMaterial(request);
+            Blit(cb, ref src, ref dst, mat, 0);
+
+            // [3] Iterate blurring operation.
+            if (request.blurMode != UIEffectSnapshotRequest.BlurMode.None)
+            {
+                for (var i = 0; i < request.blurIterations; i++)
+                {
+                    // [3.1] Apply blurring (horizontal).
+                    cb.SetGlobalVector(s_EffectFactorId, new Vector4(request.blurFactor, 0));
+                    Blit(cb, ref src, ref dst, mat, 1);
+
+                    // [3.2] Apply blurring (vertical).
+                    cb.SetGlobalVector(s_EffectFactorId, new Vector4(0, request.blurFactor));
+                    Blit(cb, ref src, ref dst, mat, 1);
+                }
+            }
+
+            // [4] Apply custom effects
+            foreach (var customMaterial in request.customMaterials)
+            {
+                if (customMaterial)
+                    Blit(cb, ref src, ref dst, customMaterial, 0);
+            }
+
+            // [5] Copy to result RT.
+            cb.Blit(dst, result);
+            cb.ReleaseTemporaryRT(s_CopyId);
+            cb.ReleaseTemporaryRT(s_EffectId1);
+            cb.ReleaseTemporaryRT(s_EffectId2);
+        }
+
+        private static void Blit(CommandBuffer cb, ref RenderTargetIdentifier src, ref RenderTargetIdentifier dst, Material mat, int pass)
+        {
+            if (dst == s_CopyId)
+            {
+                src = s_CopyId;
+                dst = s_EffectId1;
+            }
+            else if (dst == s_EffectId1)
+            {
+                src = s_EffectId1;
+                dst = s_EffectId2;
+            }
+            else
+            {
+                src = s_EffectId2;
+                dst = s_EffectId1;
+            }
+            cb.Blit(src, dst, mat, pass);
         }
 
         /// <summary>

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.UI;
+using UnityEditorInternal;
 using UnityEngine;
 using EffectMode = Coffee.UIExtensions.UIEffectSnapshotRequest.EffectMode;
 using ColorMode = Coffee.UIExtensions.UIEffectSnapshotRequest.ColorMode;
@@ -21,9 +23,8 @@ namespace Coffee.UIExtensions.Editors
         private readonly GUIContent _contentDebug = new GUIContent("Debug");
         private readonly GUIContent _contentCapture = new GUIContent("Capture");
         private readonly GUIContent _contentRelease = new GUIContent("Release");
+        private readonly GUIContent _contentCustomMaterial = new GUIContent("Custom Material For Effect");
 
-        private bool _customAdvancedOption = false;
-        private SerializedProperty _spTexture;
         private SerializedProperty _spColor;
         private SerializedProperty _spRayCastTarget;
         private SerializedProperty _spMaskable;
@@ -41,6 +42,8 @@ namespace Coffee.UIExtensions.Editors
         private SerializedProperty _spEffectColor;
         private SerializedProperty _spBlurMode;
         private SerializedProperty _spBlurFactor;
+        private ReorderableList _ro;
+        private readonly MaterialArrayEditor _materialArrayEditor = new MaterialArrayEditor();
 
 
         /// <summary>
@@ -49,7 +52,6 @@ namespace Coffee.UIExtensions.Editors
         protected override void OnEnable()
         {
             base.OnEnable();
-            _spTexture = serializedObject.FindProperty("m_Texture");
             _spColor = serializedObject.FindProperty("m_Color");
             _spRayCastTarget = serializedObject.FindProperty("m_RaycastTarget");
             _spMaskable = serializedObject.FindProperty("m_Maskable");
@@ -73,6 +75,45 @@ namespace Coffee.UIExtensions.Editors
             _spReductionRate = r.FindPropertyRelative("m_ReductionRate");
             _spFilterMode = r.FindPropertyRelative("m_FilterMode");
             _spBlurIterations = r.FindPropertyRelative("m_BlurIterations");
+
+            var sp = r.FindPropertyRelative("m_CustomMaterials");
+            _ro = new ReorderableList(sp.serializedObject, sp, true, true, true, true);
+            _ro.elementHeight = EditorGUIUtility.singleLineHeight + 4;
+            _ro.drawElementCallback = (rect, index, active, focused) =>
+            {
+                rect.y += 1;
+                rect.height = EditorGUIUtility.singleLineHeight;
+                var p = sp.GetArrayElementAtIndex(index);
+                if (p.objectReferenceValue)
+                {
+                    EditorGUI.PropertyField(rect, p, GUIContent.none);
+                }
+                else
+                {
+                    rect.width -= 40;
+                    EditorGUI.PropertyField(rect, p, GUIContent.none);
+
+                    rect.x += rect.width;
+                    rect.width = 40;
+                    if (GUI.Button(rect, "New"))
+                    {
+                        var path = AssetDatabase.GenerateUniqueAssetPath("Assets/UI-Effect-Snapshot-Extra.mat");
+                        var fileName = Path.GetFileName(path);
+                        path = EditorUtility.SaveFilePanel("Save a new extra effect material", "Assets", fileName, "mat");
+                        if (string.IsNullOrEmpty(path)) return;
+                        path = path.Replace('\\', '/').Replace(Application.dataPath, "Assets");
+                        AssetDatabase.CopyAsset("Packages/com.coffee.ui-effect-snapshot/Prefabs/UI-Effect-Snapshot-Extra.mat", path);
+                        p.objectReferenceValue = AssetDatabase.LoadAssetAtPath<Material>(path);
+                    }
+                }
+            };
+            _ro.drawHeaderCallback += rect => EditorGUI.LabelField(rect, _contentCustomMaterial);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            _materialArrayEditor.Release();
         }
 
         /// <summary>
@@ -85,7 +126,6 @@ namespace Coffee.UIExtensions.Editors
             serializedObject.Update();
 
             //==== Basic properties ====
-            // EditorGUILayout.PropertyField(_spTexture);
             EditorGUILayout.PropertyField(_spColor);
             EditorGUILayout.PropertyField(_spRayCastTarget);
             EditorGUILayout.PropertyField(_spMaskable);
@@ -121,13 +161,13 @@ namespace Coffee.UIExtensions.Editors
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(_spBlurFactor);
                 EditorGUILayout.PropertyField(_spBlurIterations); // Blur iterations.
-                DrawDownSamplingRate(_spReductionRate); // Reduction rate.
                 EditorGUI.indentLevel--;
             }
 
             //==== Advanced options ====
             GUILayout.Space(10);
             EditorGUILayout.LabelField(_contentAdvancedOption, EditorStyles.boldLabel);
+            _ro.DoLayoutList(); // Custom Materials.
             EditorGUILayout.PropertyField(_spGlobalMode); // Global Mode.
             EditorGUILayout.PropertyField(_spCaptureOnEnable); // Capture On Enable.
             EditorGUILayout.PropertyField(_spFitToScreen); // Fit To Screen.
@@ -136,7 +176,8 @@ namespace Coffee.UIExtensions.Editors
             GUILayout.Space(10);
             EditorGUILayout.LabelField(_contentResultTextureSettings, EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(_spFilterMode); // Filter Mode.
-            DrawDownSamplingRate(_spDownSamplingRate); // Sampling rate.
+            DrawDownSamplingRate(_spReductionRate); // Reduction rate.
+            DrawDownSamplingRate(_spDownSamplingRate); // Down sampling rate.
 
             serializedObject.ApplyModifiedProperties();
 
@@ -148,7 +189,6 @@ namespace Coffee.UIExtensions.Editors
                 if (GUILayout.Button(_contentCapture, "ButtonLeft"))
                 {
                     current.Release();
-                    UIEffectSnapshotUtils.RequestRepaintAllViews();
                     EditorApplication.delayCall += current.Capture;
                 }
 
@@ -160,19 +200,14 @@ namespace Coffee.UIExtensions.Editors
 
                 EditorGUI.EndDisabledGroup();
             }
-        }
 
-        static void RequestRepaintToGameView()
-        {
-            var gameViews = Resources.FindObjectsOfTypeAll(Type.GetType("UnityEditor.GameView, UnityEditor"));
-
-            Debug.Log(gameViews.Length);
-            foreach (EditorWindow gameView in gameViews)
-            {
-                Debug.Log(gameView);
-
-                EditorApplication.delayCall += gameView.Repaint;
-            }
+            // Draw custom materials.
+            var materials = targets
+                .OfType<UIEffectSnapshot>()
+                .SelectMany(x => x.request.customMaterials)
+                .Where(x => x)
+                .ToArray();
+            _materialArrayEditor.Draw(materials);
         }
 
         /// <summary>

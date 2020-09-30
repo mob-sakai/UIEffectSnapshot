@@ -1,3 +1,18 @@
+# [1.0.0-preview.6](https://github.com/mob-sakai/UIEffectSnapshot/compare/v1.0.0-preview.5...v1.0.0-preview.6) (2020-09-30)
+
+
+### Bug Fixes
+
+* stop coroutine on previous coroutine ([a4e0e14](https://github.com/mob-sakai/UIEffectSnapshot/commit/a4e0e1439f8e6f6a24f8aa5bed152e4374a32e66))
+* support 2019.4 or later ([136e332](https://github.com/mob-sakai/UIEffectSnapshot/commit/136e33239ce4c2d0670a51c36aa94c3857cc41c7))
+
+
+### Features
+
+* extra effect shader ([f810046](https://github.com/mob-sakai/UIEffectSnapshot/commit/f810046d217cdaaa2de5472ad95db8e1ea958cf3))
+* preview custom materials in inspector ([9cdc4ac](https://github.com/mob-sakai/UIEffectSnapshot/commit/9cdc4ac87a2032ff9827dd93d546b55120bc35db))
+* support custom material ([ed3ddf8](https://github.com/mob-sakai/UIEffectSnapshot/commit/ed3ddf84162be1aa2717554240442b41250dcb4b))
+
 # [1.0.0-preview.5](https://github.com/mob-sakai/UIEffectSnapshot/compare/v1.0.0-preview.4...v1.0.0-preview.5) (2020-09-29)
 
 

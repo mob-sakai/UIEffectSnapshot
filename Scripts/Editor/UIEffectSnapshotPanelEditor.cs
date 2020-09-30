@@ -43,7 +43,6 @@ namespace Coffee.UIExtensions.Editors
                     t.Refresh();
                 }
             };
-
         }
 
         public override void OnInspectorGUI()

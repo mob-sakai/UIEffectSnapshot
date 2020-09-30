@@ -18,8 +18,9 @@ namespace Coffee.UIExtensions
     {
         [SerializeField] UIEffectSnapshotRequest m_Request = new UIEffectSnapshotRequest();
 
-
+#if !UNITY_2019_4_OR_NEWER
         [SerializeField] private bool m_Maskable = true;
+#endif
 
         [Tooltip("Fits graphic size to screen on captured.")] [SerializeField]
         bool m_FitToScreen = true;
@@ -86,7 +87,9 @@ namespace Coffee.UIExtensions
         /// </summary>
         protected override void OnEnable()
         {
+#if !UNITY_2019_4_OR_NEWER
             maskable = m_Maskable;
+#endif
             base.OnEnable();
 
             // Capture on enable.
@@ -130,7 +133,9 @@ namespace Coffee.UIExtensions
 
         protected override void UpdateMaterial()
         {
+#if !UNITY_2019_4_OR_NEWER
             m_Maskable = maskable;
+#endif
             base.UpdateMaterial();
         }
 
@@ -273,7 +278,9 @@ namespace Coffee.UIExtensions
 
         protected override void OnValidate()
         {
+#if !UNITY_2019_4_OR_NEWER
             maskable = m_Maskable;
+#endif
             base.OnValidate();
         }
 #endif

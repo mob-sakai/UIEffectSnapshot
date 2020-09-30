@@ -105,9 +105,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7676051578752548448}
   - component: {fileID: 4693914894122992141}
-  - component: {fileID: 5964732709168100557}
-  - component: {fileID: 454840774989863976}
-  - component: {fileID: 245398435036405870}
   - component: {fileID: 7864688381913181946}
   m_Layer: 5
   m_Name: UIEffectSnapshot_Demo
@@ -150,62 +147,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!95 &5964732709168100557
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 279762811499247117}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9f547f6cee3a849c9b9a5a041c17ad0e, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!222 &454840774989863976
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 279762811499247117}
-  m_CullTransparentMesh: 0
---- !u!114 &245398435036405870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 279762811499247117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.003921569}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
 --- !u!114 &7864688381913181946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,7 +162,7 @@ MonoBehaviour:
   m_Snapshots:
   - {fileID: 5993515991732546341}
   - {fileID: 7882780076879888200}
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.15
   m_ShowOnEnable: 1
   m_DeactivateOnHidden: 1
 --- !u!1 &1285684401037628466
@@ -538,7 +479,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 387.62216}
+  m_SizeDelta: {x: 571, y: 367}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8263724170598987957
 CanvasRenderer:
@@ -587,6 +528,7 @@ MonoBehaviour:
     m_DownSamplingRate: 2
     m_ReductionRate: 1
     m_FilterMode: 1
+    m_CustomMaterials: []
   m_Maskable: 0
   m_FitToScreen: 1
   m_CaptureOnEnable: 1
@@ -929,7 +871,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 387.62216}
+  m_SizeDelta: {x: 571, y: 367}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6970667223250786316
 CanvasRenderer:
@@ -978,6 +920,7 @@ MonoBehaviour:
     m_DownSamplingRate: 2
     m_ReductionRate: 4
     m_FilterMode: 1
+    m_CustomMaterials: []
   m_Maskable: 1
   m_FitToScreen: 1
   m_CaptureOnEnable: 1
