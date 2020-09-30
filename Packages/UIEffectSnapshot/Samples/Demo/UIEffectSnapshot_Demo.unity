@@ -787,6 +787,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 429162534}
   m_CullTransparentMesh: 0
+--- !u!1 &508782094 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2624791573190389172, guid: 2c9f8a252af7f457aaede42aebf6f001,
+    type: 3}
+  m_PrefabInstance: {fileID: 1619644524}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &508782095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508782094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.2509804}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
 --- !u!1 &736274118
 GameObject:
   m_ObjectHideFlags: 0
@@ -1687,7 +1722,10 @@ PrefabInstance:
       propertyPath: m_Text
       value: (Semi-transparent background)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5993515991732546341, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
+    - {fileID: 245398435036405870, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
+    - {fileID: 454840774989863976, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
 --- !u!224 &1619644525 stripped
 RectTransform:
@@ -1967,7 +2005,12 @@ PrefabInstance:
     - target: {fileID: 4323112992991270311, guid: 2c9f8a252af7f457aaede42aebf6f001,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 387.62216
+      value: 257.0928
+      objectReference: {fileID: 0}
+    - target: {fileID: 4323112992991270311, guid: 2c9f8a252af7f457aaede42aebf6f001,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 5993515991732546341, guid: 2c9f8a252af7f457aaede42aebf6f001,
         type: 3}
@@ -1987,7 +2030,12 @@ PrefabInstance:
     - target: {fileID: 1754020739760357196, guid: 2c9f8a252af7f457aaede42aebf6f001,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 387.62216
+      value: 257.0928
+      objectReference: {fileID: 0}
+    - target: {fileID: 1754020739760357196, guid: 2c9f8a252af7f457aaede42aebf6f001,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 7882780076879888200, guid: 2c9f8a252af7f457aaede42aebf6f001,
         type: 3}
@@ -2006,7 +2054,9 @@ PrefabInstance:
       propertyPath: m_Text
       value: (Captured background)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 245398435036405870, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
+    - {fileID: 454840774989863976, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
 --- !u!224 &1712508019 stripped
 RectTransform:
@@ -2690,7 +2740,12 @@ PrefabInstance:
     - target: {fileID: 4323112992991270311, guid: 2c9f8a252af7f457aaede42aebf6f001,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 387.62216
+      value: 257.0928
+      objectReference: {fileID: 0}
+    - target: {fileID: 4323112992991270311, guid: 2c9f8a252af7f457aaede42aebf6f001,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 5993515991732546341, guid: 2c9f8a252af7f457aaede42aebf6f001,
         type: 3}
@@ -2705,7 +2760,12 @@ PrefabInstance:
     - target: {fileID: 1754020739760357196, guid: 2c9f8a252af7f457aaede42aebf6f001,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 387.62216
+      value: 257.0928
+      objectReference: {fileID: 0}
+    - target: {fileID: 1754020739760357196, guid: 2c9f8a252af7f457aaede42aebf6f001,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 7882780076879888200, guid: 2c9f8a252af7f457aaede42aebf6f001,
         type: 3}
@@ -2729,7 +2789,9 @@ PrefabInstance:
 
         with a blurred background.'
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 245398435036405870, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
+    - {fileID: 454840774989863976, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
 --- !u!224 &2146816422 stripped
 RectTransform:
@@ -2954,7 +3016,12 @@ PrefabInstance:
     - target: {fileID: 4323112992991270311, guid: 2c9f8a252af7f457aaede42aebf6f001,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 387.62216
+      value: 257.0928
+      objectReference: {fileID: 0}
+    - target: {fileID: 4323112992991270311, guid: 2c9f8a252af7f457aaede42aebf6f001,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 5993515991732546341, guid: 2c9f8a252af7f457aaede42aebf6f001,
         type: 3}
@@ -2964,12 +3031,19 @@ PrefabInstance:
     - target: {fileID: 1754020739760357196, guid: 2c9f8a252af7f457aaede42aebf6f001,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 387.62216
+      value: 257.0928
+      objectReference: {fileID: 0}
+    - target: {fileID: 1754020739760357196, guid: 2c9f8a252af7f457aaede42aebf6f001,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 7882780076879888200, guid: 2c9f8a252af7f457aaede42aebf6f001,
         type: 3}
       propertyPath: m_Texture
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 245398435036405870, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
+    - {fileID: 454840774989863976, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2c9f8a252af7f457aaede42aebf6f001, type: 3}
