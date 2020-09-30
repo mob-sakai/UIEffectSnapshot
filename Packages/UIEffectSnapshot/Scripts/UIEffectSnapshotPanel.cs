@@ -72,7 +72,7 @@ namespace Coffee.UIExtensions
 #endif
 
             UIEffectSnapshotUtils.StopCoroutineSafety(_coroutine);
-            UIEffectSnapshotUtils.StartCoroutineSafety(Co_Show(m_TransitionDuration, callback));
+            _coroutine = UIEffectSnapshotUtils.StartCoroutineSafety(Co_Show(m_TransitionDuration, callback));
         }
 
         public void Hide()
@@ -91,7 +91,7 @@ namespace Coffee.UIExtensions
 #endif
 
             UIEffectSnapshotUtils.StopCoroutineSafety(_coroutine);
-            UIEffectSnapshotUtils.StartCoroutineSafety(Co_Hide(m_TransitionDuration, callback));
+            _coroutine = UIEffectSnapshotUtils.StartCoroutineSafety(Co_Hide(m_TransitionDuration, callback));
         }
 
         private IEnumerator Co_Show(float duration, Action callback)
