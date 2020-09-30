@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Snapshots:
   - {fileID: 5993515991732546341}
   - {fileID: 7882780076879888200}
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.15
   m_ShowOnEnable: 1
   m_DeactivateOnHidden: 1
 --- !u!1 &1285684401037628466
@@ -528,6 +528,7 @@ MonoBehaviour:
     m_DownSamplingRate: 2
     m_ReductionRate: 1
     m_FilterMode: 1
+    m_CustomMaterials: []
   m_Maskable: 0
   m_FitToScreen: 1
   m_CaptureOnEnable: 1
@@ -919,6 +920,7 @@ MonoBehaviour:
     m_DownSamplingRate: 2
     m_ReductionRate: 4
     m_FilterMode: 1
+    m_CustomMaterials: []
   m_Maskable: 1
   m_FitToScreen: 1
   m_CaptureOnEnable: 1
