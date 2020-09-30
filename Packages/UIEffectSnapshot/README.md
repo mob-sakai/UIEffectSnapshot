@@ -8,9 +8,12 @@ The captured snapshot can be used as a background for a UI panel.
 [![](https://img.shields.io/npm/v/com.coffee.ui-effect-snapshot?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.coffee.ui-effect-snapshot/)
 [![](https://img.shields.io/github/v/release/mob-sakai/UIEffectSnapshot?include_prereleases)](https://github.com/mob-sakai/UIEffectSnapshot/releases)
 [![](https://img.shields.io/github/release-date-pre/mob-sakai/UIEffectSnapshot)](https://github.com/mob-sakai/UIEffectSnapshot/releases)
-![](https://img.shields.io/badge/unity-2018.3%20or%20later-green.svg)
 [![](https://img.shields.io/github/license/mob-sakai/UIEffectSnapshot.svg)](https://github.com/mob-sakai/UIEffectSnapshot/blob/upm/LICENSE.txt)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-orange.svg)](http://makeapullrequest.com)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-orange.svg)](http://makeapullrequest.com)  
+![](https://img.shields.io/badge/Unity%202019.3-supported-blue.svg)
+![](https://img.shields.io/badge/Unity%202019.x-supported-blue.svg)
+![](https://img.shields.io/badge/Unity%202020.x-supported-blue.svg)
+![](https://img.shields.io/badge/Universal%20Rendering%20Pipeline-supported-blue.svg)  
 [![](https://img.shields.io/twitter/follow/mob_sakai.svg?label=Follow&style=social)](https://twitter.com/intent/follow?screen_name=mob_sakai)
 
 
@@ -59,25 +62,31 @@ Disabling their animations or hiding them would improve performance and power co
   * Support for mobile.
   * No extra camera and `PostProcessingStack` are needed.
 * Support render mode: `Screen Space - Overlay` and `Screen Space - Camera`
-* Effect Mode: Grayscale, Sepia, Nega, Pixelation
-* Color Mode: Multiply, Fill, Additive, Subtract
-* Blur Mode: Fast Blur, Medium Blur, Detail Blur
+* Effect Mode: **Grayscale, Sepia, Nega, Pixelation**
+* Color Mode: **Multiply, Fill, Additive, Subtract**
+* Blur Mode: **Fast Blur, Medium Blur, Detail Blur**
 * Global Mode: Capture a screenshot in cases where there is no UIEffectSnapshot instance.
 * Capture On Enable: When the component is enable, capture screen automatically.
 * Fit to screen: Fit the RectTransform to the screen.
+* Menus to create object
+* Support custom effect materials.
+  * Built-in custom effects: **Vignette, Distortion, Noise, Scanning line, RGB Shift**
+  * Apply any image effect as you like.
+* Support [Universal Render Pipeline](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@10.0/manual/index.html)
 
 ### Future Plans
 
 * Support render mode: `World Space - Camera`
-* Custom effect material
 * Support pre-generated RenderTexture as result
-* Support [Universal Render Pipeline](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@10.0/manual/index.html)
 
 <br><br><br><br>
 
 ## Demo
 
 * [WebGL Demo](https://mob-sakai.github.io/Demos/UIEffectSnapshot)
+
+![](https://user-images.githubusercontent.com/12690315/94726503-4c99eb00-0398-11eb-8136-7dcfb5241192.png)
+![](https://user-images.githubusercontent.com/12690315/94726239-e90fbd80-0397-11eb-91b4-dde4b7440122.png)
 
 <br><br><br><br>
 
@@ -123,13 +132,14 @@ Or, use [UpmGitExtension](https://github.com/mob-sakai/UpmGitExtension) to insta
 
 - This is a component to capture a screenshot with effects and display it.
 - Select `Game Object/UI/Effect Snapshot` to create.
-- Adjust the capture effect and press the `Capture` or `Release` button in the inspector to preview the snapshot.
+- Adjust the capture effect and press the `Capture` or `Release` button in the inspector to preview the snapshot.  
+![](https://user-images.githubusercontent.com/12690315/94724255-f6777880-0394-11eb-97c2-5c9e04375cfd.png)
 
 | Properties | Screenshot |
 | -- | -- |
-| **Effect Mode:** Grayscale, Sepia, Nega, Pixelation <br>**Color Mode:** Multiply, Fill, Additive, Subtract <br>**Blur Mode:** Fast, Medium, Detail <br><br>**Global Mode:** Use a global image instead of an instance image. <br>**Capture On Enable:** When the component is enable, capture screen automatically.<br>**Fit To Screen:** Fit transform to the root canvas on enable/captured. | ![][snapshot] |
+| **Effect Mode:** Grayscale, Sepia, Nega, Pixelation <br>**Color Mode:** Multiply, Fill, Additive, Subtract <br>**Blur Mode:** Fast, Medium, Detail <br><br>**Custom Materials:** Additional image effect material. The built-ins include Vignette, Distortion, Noise, Scanning line, RGB Shift. <br>**Global Mode:** Use a global image instead of an instance image. <br>**Capture On Enable:** When the component is enable, capture screen automatically.<br>**Fit To Screen:** Fit transform to the root canvas on enable/captured. <br><br>**Reduction Rate:** Reduce the size of the intermediate buffer used to render effects. <br>**Down Sampling Rate:** Reduce the size of the result RenderTexture. | ![][snapshot] |
 
-[snapshot]:https://user-images.githubusercontent.com/12690315/94591029-784aa180-02c2-11eb-81e2-47683f4bb44f.png
+[snapshot]:https://user-images.githubusercontent.com/12690315/94722627-8a941080-0392-11eb-9627-322aa0c5b35c.png
 
 #### Script usage
 
@@ -146,18 +156,31 @@ uiEffectSnapshot.Capture(callback: request => { Debug.Log("Captured"); });
 // Or, you can use 'UIEffectSnapshot.globalCapturedTexture' property to get it.
 UIEffectSnapshot.CaptureForGlobal(callback: request => { Debug.Log("Captured"); });
 ```
+
+#### Built-in custom material usage
+
+1. Click `New` button in inspector and save the material into the project.  
+![](https://user-images.githubusercontent.com/12690315/94723864-5cafcb80-0394-11eb-9988-4b7ce57b7bc1.png)
+2. The generated material is automatically set as a property. Adjust the functions and values of the material.  
+![](https://user-images.githubusercontent.com/12690315/94724257-f7a8a580-0394-11eb-810f-117233ea6cd4.png)
+3. Press `Capture` button to preview the custom effect.  
+![](https://user-images.githubusercontent.com/12690315/94724255-f6777880-0394-11eb-97c2-5c9e04375cfd.png)
+
 <br><br>
 
 ### UIEffectSnapshotPanel
 
 - This is a component for easy control of a panel with snapshot background/panel.
-- Select `Game Object/UI/UI Effect Snapshot Panel/***` to create a panel with snapshot.
+- Select `Game Object/UI/UI Effect Snapshot Panel/***` to create a panel with snapshot preset.  
+![](https://user-images.githubusercontent.com/12690315/94724878-e6ac6400-0395-11eb-9c3f-e075cf42db86.png)
+- Press the `Show` or `Hide` button in the inspector to preview the snapshot.  
+![](https://user-images.githubusercontent.com/12690315/94724984-0a6faa00-0396-11eb-9c2d-9645dbdbf923.png)
 
 | Properties | Screenshot |
 | -- | -- |
-| **Snapshots:** UIEffectSnapshot instances to control. <br>**Transition Duration:** Duration of show/hide transition. <br>**Show On Enable:** When the component is enable, show the panel automatically. | ![][panel] |
+| **Snapshots:** UIEffectSnapshot instances to control. Press `Refresh` button to set children snapshots. <br>**Transition Duration:** Duration of show/hide transition. <br>**Show On Enable:** When the component is enable, show the panel automatically. <br>**Deactivate On Hidden:** When the component is hidden, deactivate the gameObject automatically. | ![][panel] |
 
-[panel]:https://user-images.githubusercontent.com/12690315/94591035-7a146500-02c2-11eb-9daa-c4b81311ae32.png
+[panel]:https://user-images.githubusercontent.com/12690315/94722637-8bc53d80-0392-11eb-9f61-5e9082fb1134.png
 
 #### Script usage
 
@@ -185,6 +208,14 @@ panel.Hide(callback: request => { Debug.Log("Hidden"); });
 1. Select `Assets/Samples/UI Effect Snapshot Demo` from menu
 2. The demo project is imported into `Assets/Samples/UI Effect Snapshot/{version}/Demo`
 3. Open `UIEffectSnapshot_Demo` scene and play it
+
+### For [Universal Render Pipeline](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@10.0/manual/index.html) environment
+
+1. Find `RotationCube.mat` in `Assets` and select all sub-assets.  
+![](https://user-images.githubusercontent.com/12690315/94722208-eca04600-0391-11eb-9e44-cab873deee04.png)
+2. Change the shader of materials to `Universal Render Pipeline/Lit`.  
+![](https://user-images.githubusercontent.com/12690315/94722202-eb6f1900-0391-11eb-96cd-19db17a99314.png)
+
 
 <br><br><br><br>
 
