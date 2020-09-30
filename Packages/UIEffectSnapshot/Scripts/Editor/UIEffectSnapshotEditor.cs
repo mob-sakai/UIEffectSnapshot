@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using UnityEditor;
 using UnityEditor.UI;
 using UnityEditorInternal;
@@ -84,9 +85,31 @@ namespace Coffee.UIExtensions.Editors
             {
                 rect.y += 1;
                 rect.height = EditorGUIUtility.singleLineHeight;
-                EditorGUI.PropertyField(rect, sp.GetArrayElementAtIndex(index), GUIContent.none);
+                var p = sp.GetArrayElementAtIndex(index);
+                if (p.objectReferenceValue)
+                {
+                    EditorGUI.PropertyField(rect, p, GUIContent.none);
+                }
+                else
+                {
+                    rect.width -= 40;
+                    EditorGUI.PropertyField(rect, p, GUIContent.none);
+
+                    rect.x += rect.width;
+                    rect.width = 40;
+                    if (GUI.Button(rect, "New"))
+                    {
+                        var path = AssetDatabase.GenerateUniqueAssetPath("Assets/UI-Effect-Snapshot-Extra.mat");
+                        var fileName = Path.GetFileName(path);
+                        path = EditorUtility.SaveFilePanel("Save a new extra effect material", "Assets", fileName, "mat");
+                        if (string.IsNullOrEmpty(path)) return;
+                        path = path.Replace('\\', '/').Replace(Application.dataPath, "Assets");
+                        AssetDatabase.CopyAsset("Packages/com.coffee.ui-effect-snapshot/Prefabs/UI-Effect-Snapshot-Extra.mat", path);
+                        p.objectReferenceValue = AssetDatabase.LoadAssetAtPath<Material>(path);
+                    }
+                }
             };
-            _ro.drawHeaderCallback += rect =>EditorGUI.LabelField(rect, _contentCustomMaterial);
+            _ro.drawHeaderCallback += rect => EditorGUI.LabelField(rect, _contentCustomMaterial);
         }
 
         /// <summary>
