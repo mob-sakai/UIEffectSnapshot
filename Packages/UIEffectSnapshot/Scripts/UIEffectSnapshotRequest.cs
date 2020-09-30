@@ -87,6 +87,9 @@ namespace Coffee.UIExtensions
         [Tooltip("FilterMode for capturing.")] [SerializeField]
         FilterMode m_FilterMode = FilterMode.Bilinear;
 
+        [Tooltip("Custom materials for post effect.")] [SerializeField]
+        Material[] m_CustomMaterials = new Material[0];
+
 
         /// <summary>
         /// Effect mode.
@@ -187,6 +190,14 @@ namespace Coffee.UIExtensions
             set { m_FilterMode = value; }
         }
 
+        /// <summary>
+        /// Custom materials for post effect.
+        /// </summary>
+        public Material[] customMaterials
+        {
+            get { return m_CustomMaterials; }
+            set { m_CustomMaterials = value; }
+        }
 
         internal RenderTexture renderTexture { get; set; }
         internal bool globalMode { get; set; }

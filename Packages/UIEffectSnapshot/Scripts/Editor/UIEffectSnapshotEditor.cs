@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEditor;
 using UnityEditor.UI;
+using UnityEditorInternal;
 using UnityEngine;
 using EffectMode = Coffee.UIExtensions.UIEffectSnapshotRequest.EffectMode;
 using ColorMode = Coffee.UIExtensions.UIEffectSnapshotRequest.ColorMode;
@@ -21,6 +22,7 @@ namespace Coffee.UIExtensions.Editors
         private readonly GUIContent _contentDebug = new GUIContent("Debug");
         private readonly GUIContent _contentCapture = new GUIContent("Capture");
         private readonly GUIContent _contentRelease = new GUIContent("Release");
+        private readonly GUIContent _contentCustomMaterial = new GUIContent("Custom Material For Effect");
 
         private bool _customAdvancedOption = false;
         private SerializedProperty _spTexture;
@@ -41,6 +43,7 @@ namespace Coffee.UIExtensions.Editors
         private SerializedProperty _spEffectColor;
         private SerializedProperty _spBlurMode;
         private SerializedProperty _spBlurFactor;
+        private ReorderableList _ro;
 
 
         /// <summary>
@@ -73,6 +76,17 @@ namespace Coffee.UIExtensions.Editors
             _spReductionRate = r.FindPropertyRelative("m_ReductionRate");
             _spFilterMode = r.FindPropertyRelative("m_FilterMode");
             _spBlurIterations = r.FindPropertyRelative("m_BlurIterations");
+
+            var sp = r.FindPropertyRelative("m_CustomMaterials");
+            _ro = new ReorderableList(sp.serializedObject, sp, false, true, true, true);
+            _ro.elementHeight = EditorGUIUtility.singleLineHeight + 4;
+            _ro.drawElementCallback = (rect, index, active, focused) =>
+            {
+                rect.y += 1;
+                rect.height = EditorGUIUtility.singleLineHeight;
+                EditorGUI.PropertyField(rect, sp.GetArrayElementAtIndex(index), GUIContent.none);
+            };
+            _ro.drawHeaderCallback += rect =>EditorGUI.LabelField(rect, _contentCustomMaterial);
         }
 
         /// <summary>
@@ -123,6 +137,9 @@ namespace Coffee.UIExtensions.Editors
                 EditorGUILayout.PropertyField(_spBlurIterations); // Blur iterations.
                 EditorGUI.indentLevel--;
             }
+
+            //==== Custom Materials ====
+            _ro.DoLayoutList();
 
             //==== Advanced options ====
             GUILayout.Space(10);
