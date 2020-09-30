@@ -121,7 +121,6 @@ namespace Coffee.UIExtensions.Editors
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(_spBlurFactor);
                 EditorGUILayout.PropertyField(_spBlurIterations); // Blur iterations.
-                DrawDownSamplingRate(_spReductionRate); // Reduction rate.
                 EditorGUI.indentLevel--;
             }
 
@@ -136,7 +135,8 @@ namespace Coffee.UIExtensions.Editors
             GUILayout.Space(10);
             EditorGUILayout.LabelField(_contentResultTextureSettings, EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(_spFilterMode); // Filter Mode.
-            DrawDownSamplingRate(_spDownSamplingRate); // Sampling rate.
+            DrawDownSamplingRate(_spReductionRate); // Reduction rate.
+            DrawDownSamplingRate(_spDownSamplingRate); // Down sampling rate.
 
             serializedObject.ApplyModifiedProperties();
 
