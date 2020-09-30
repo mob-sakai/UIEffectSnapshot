@@ -25,8 +25,6 @@ namespace Coffee.UIExtensions.Editors
         private readonly GUIContent _contentRelease = new GUIContent("Release");
         private readonly GUIContent _contentCustomMaterial = new GUIContent("Custom Material For Effect");
 
-        private bool _customAdvancedOption = false;
-        private SerializedProperty _spTexture;
         private SerializedProperty _spColor;
         private SerializedProperty _spRayCastTarget;
         private SerializedProperty _spMaskable;
@@ -45,6 +43,7 @@ namespace Coffee.UIExtensions.Editors
         private SerializedProperty _spBlurMode;
         private SerializedProperty _spBlurFactor;
         private ReorderableList _ro;
+        private readonly MaterialArrayEditor _materialArrayEditor = new MaterialArrayEditor();
 
 
         /// <summary>
@@ -53,7 +52,6 @@ namespace Coffee.UIExtensions.Editors
         protected override void OnEnable()
         {
             base.OnEnable();
-            _spTexture = serializedObject.FindProperty("m_Texture");
             _spColor = serializedObject.FindProperty("m_Color");
             _spRayCastTarget = serializedObject.FindProperty("m_RaycastTarget");
             _spMaskable = serializedObject.FindProperty("m_Maskable");
@@ -122,7 +120,6 @@ namespace Coffee.UIExtensions.Editors
             serializedObject.Update();
 
             //==== Basic properties ====
-            // EditorGUILayout.PropertyField(_spTexture);
             EditorGUILayout.PropertyField(_spColor);
             EditorGUILayout.PropertyField(_spRayCastTarget);
             EditorGUILayout.PropertyField(_spMaskable);
@@ -161,12 +158,10 @@ namespace Coffee.UIExtensions.Editors
                 EditorGUI.indentLevel--;
             }
 
-            //==== Custom Materials ====
-            _ro.DoLayoutList();
-
             //==== Advanced options ====
             GUILayout.Space(10);
             EditorGUILayout.LabelField(_contentAdvancedOption, EditorStyles.boldLabel);
+            _ro.DoLayoutList(); // Custom Materials.
             EditorGUILayout.PropertyField(_spGlobalMode); // Global Mode.
             EditorGUILayout.PropertyField(_spCaptureOnEnable); // Capture On Enable.
             EditorGUILayout.PropertyField(_spFitToScreen); // Fit To Screen.
@@ -188,7 +183,6 @@ namespace Coffee.UIExtensions.Editors
                 if (GUILayout.Button(_contentCapture, "ButtonLeft"))
                 {
                     current.Release();
-                    UIEffectSnapshotUtils.RequestRepaintAllViews();
                     EditorApplication.delayCall += current.Capture;
                 }
 
@@ -199,19 +193,6 @@ namespace Coffee.UIExtensions.Editors
                 }
 
                 EditorGUI.EndDisabledGroup();
-            }
-        }
-
-        static void RequestRepaintToGameView()
-        {
-            var gameViews = Resources.FindObjectsOfTypeAll(Type.GetType("UnityEditor.GameView, UnityEditor"));
-
-            Debug.Log(gameViews.Length);
-            foreach (EditorWindow gameView in gameViews)
-            {
-                Debug.Log(gameView);
-
-                EditorApplication.delayCall += gameView.Repaint;
             }
         }
 

@@ -6,21 +6,30 @@ namespace Coffee.UIExtensions.Editors
 {
     internal class MenuOptions_UIEffectSnapshot
     {
-        [MenuItem("GameObject/UI/UI Effect Snapshot Panel/With Blurred Background", false, 2100)]
+        [MenuItem("GameObject/UI/UI Effect Snapshot", false, 12000)]
+        private static void CreateUIEffectSnapshot(MenuCommand menuCommand)
+        {
+            EditorApplication.ExecuteMenuItem("GameObject/UI/Image");
+            var instance = Selection.activeGameObject;
+            Object.DestroyImmediate(instance.GetComponent<Image>());
+
+            instance.AddComponent<UIEffectSnapshot>();
+            instance.name = ObjectNames.NicifyVariableName(typeof(UIEffectSnapshot).Name);
+        }
+
+        [MenuItem("GameObject/UI/UI Effect Snapshot Panel/With Blurred Background", false, 12011)]
         private static void CreateUIEffectSnapshotPanel_Bg(MenuCommand menuCommand)
         {
             CreateUIEffectSnapshotPanel(true, false);
         }
 
-
-        [MenuItem("GameObject/UI/UI Effect Snapshot Panel/With Blurred Panel", false, 2100)]
+        [MenuItem("GameObject/UI/UI Effect Snapshot Panel/With Blurred Panel", false, 12012)]
         private static void CreateUIEffectSnapshotPanel_Panel(MenuCommand menuCommand)
         {
             CreateUIEffectSnapshotPanel(false, true);
         }
 
-
-        [MenuItem("GameObject/UI/UI Effect Snapshot Panel/With Blurred Background & Panel", false, 2100)]
+        [MenuItem("GameObject/UI/UI Effect Snapshot Panel/With Blurred Background & Panel", false, 12013)]
         private static void CreateUIEffectSnapshotPanel_BgPanel(MenuCommand menuCommand)
         {
             CreateUIEffectSnapshotPanel(true, true);
@@ -64,17 +73,6 @@ namespace Coffee.UIExtensions.Editors
             }
 
             instance.GetComponent<UIEffectSnapshotPanel>().Refresh();
-        }
-
-        [MenuItem("GameObject/UI/UI Effect Snapshot", false, 2100)]
-        private static void CreateUIEffectSnapshot(MenuCommand menuCommand)
-        {
-            EditorApplication.ExecuteMenuItem("GameObject/UI/Image");
-            var instance = Selection.activeGameObject;
-            Object.DestroyImmediate(instance.GetComponent<Image>());
-
-            instance.AddComponent<UIEffectSnapshot>();
-            instance.name = ObjectNames.NicifyVariableName(typeof(UIEffectSnapshot).Name);
         }
     }
 }
