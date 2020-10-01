@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -203,5 +204,10 @@ namespace Coffee.UIExtensions
         internal bool globalMode { get; set; }
         internal CommandBuffer commandBuffer { get; set; }
         internal Action<UIEffectSnapshotRequest> postAction { get; set; }
+
+        public int materialHash
+        {
+            get { return ((int) m_EffectMode << 8) + ((int) m_ColorMode << 4) + ((int) m_BlurMode << 0); }
+        }
     }
 }

@@ -21,6 +21,7 @@ namespace Coffee.UIExtensions
         private static int s_ColorFactorId;
         private static RenderTexture s_GlobalRt;
         private static Shader s_EffectShader;
+        private static Dictionary<int,Material> s_MaterialMap = new Dictionary<int, Material>();
 
 
 #if UNITY_2018_3_OR_NEWER && UNITY_EDITOR
@@ -84,8 +85,9 @@ namespace Coffee.UIExtensions
 
         public void Register(UIEffectSnapshotRequest request)
         {
-            if (request != null && !s_Requests.Contains(request))
-                s_Requests.Add(request);
+            if (request == null || s_Requests.Contains(request)) return;
+
+            s_Requests.Add(request);
         }
 
         private void OnEnable()
@@ -128,11 +130,17 @@ namespace Coffee.UIExtensions
 
         private static Material GetMaterial(UIEffectSnapshotRequest request)
         {
-            var material = new Material(s_EffectShader);
-            material.shaderKeywords = new object[] {request.effectMode, request.colorMode, request.blurMode}
-                .Where(x => 0 < (int) x)
-                .Select(x => x.ToString().ToUpper())
-                .ToArray();
+            var hash = request.materialHash;
+            Material material;
+            if(!s_MaterialMap.TryGetValue(hash, out material) || !material)
+            {
+                material = new Material(s_EffectShader);
+                material.shaderKeywords = new object[] {request.effectMode, request.colorMode, request.blurMode}
+                    .Where(x => 0 < (int) x)
+                    .Select(x => x.ToString().ToUpper())
+                    .ToArray();
+                s_MaterialMap[hash] = material;
+            }
             return material;
         }
 
