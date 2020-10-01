@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Coffee.UIExtensions.Editors
 {
-    public class MaterialArrayEditor
+    internal class MaterialArrayEditor
     {
         private Editor[] _editors;
 

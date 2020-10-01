@@ -156,6 +156,10 @@ namespace Coffee.UIExtensions
         public void Refresh()
         {
             m_Snapshots = GetComponentsInChildren<UIEffectSnapshot>();
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
     }
 }

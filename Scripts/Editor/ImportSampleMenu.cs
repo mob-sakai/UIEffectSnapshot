@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace Coffee.UIExtensions.Editors
 {
-    static class ImportSampleMenu_UIEffectSnapshot
+    internal static class ImportSampleMenu_UIEffectSnapshot
     {
         private const string k_DisplayName = "UI Effect Snapshot";
         private const string k_JsonGuid = "340e3f36d502c4cd687c4fbf222ec429";
