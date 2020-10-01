@@ -84,7 +84,10 @@ Shader "Hidden/UI Effect Snapshot Extra"
                     float r2 = h.x * h.x + h.y * h.y;
                     float f = 1.0 + r2 * (_DistortionIntensity * sqrt(r2));
                     uv = f / _Scale * h + 0.5;
-                    uv.y = 1 - uv.y;
+
+                    #if UNITY_UV_STARTS_AT_TOP
+                        uv.y = 1 - uv.y;
+                    #endif
                 #endif
 
                 half4 col = tex2D(_MainTex, uv);
