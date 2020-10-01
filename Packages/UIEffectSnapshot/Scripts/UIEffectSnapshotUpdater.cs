@@ -158,9 +158,15 @@ namespace Coffee.UIExtensions
             }
             else
 #endif
+            if (Screen.fullScreenMode == FullScreenMode.Windowed)
             {
                 w = Screen.width;
                 h = Screen.height;
+            }
+            else
+            {
+                w = Screen.currentResolution.width;
+                h = Screen.currentResolution.height;
             }
 
             if (rate == UIEffectSnapshotRequest.DownSamplingRate.None)
