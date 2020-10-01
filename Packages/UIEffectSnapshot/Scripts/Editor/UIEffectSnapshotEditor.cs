@@ -15,7 +15,7 @@ namespace Coffee.UIExtensions.Editors
     /// </summary>
     [CustomEditor(typeof(UIEffectSnapshot))]
     [CanEditMultipleObjects]
-    public class UIEffectSnapshotEditor : RawImageEditor
+    internal class UIEffectSnapshotEditor : RawImageEditor
     {
         private readonly GUIContent _contentCaptureEffect = new GUIContent("Effect Settings On Capture");
         private readonly GUIContent _contentAdvancedOption = new GUIContent("Advanced Option");

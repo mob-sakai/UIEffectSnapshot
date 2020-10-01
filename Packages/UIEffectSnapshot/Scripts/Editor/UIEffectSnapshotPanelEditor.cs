@@ -9,7 +9,7 @@ namespace Coffee.UIExtensions.Editors
     /// </summary>
     [CustomEditor(typeof(UIEffectSnapshotPanel))]
     [CanEditMultipleObjects]
-    public class UIEffectSnapshotPanelEditor : Editor
+    internal class UIEffectSnapshotPanelEditor : Editor
     {
         static GUIContent _contentHeader = new GUIContent("UI Effect Snapshots To Control");
 
