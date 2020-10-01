@@ -38,7 +38,8 @@ node_modules
 .idea
 Assets/Plugins.meta
 Assets/Plugins
-Assets/JMO Assets.meta
-Assets/JMO Assets
-Assets/EffectExamples/
-Assets/EffectExamples.meta
+
+ios/
+android/
+webgl/
+
