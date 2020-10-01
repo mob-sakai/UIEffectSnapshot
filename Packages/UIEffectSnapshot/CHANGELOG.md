@@ -1,3 +1,13 @@
+# [1.0.0-preview.7](https://github.com/mob-sakai/UIEffectSnapshot/compare/v1.0.0-preview.6...v1.0.0-preview.7) (2020-10-01)
+
+
+### Bug Fixes
+
+* leak materials on capture ([f41108f](https://github.com/mob-sakai/UIEffectSnapshot/commit/f41108f9a2c2337354971e7c237567261245cb1b))
+* screen resolution in full screen mode is incorrect ([466e08b](https://github.com/mob-sakai/UIEffectSnapshot/commit/466e08bc1d14040a5a6794f545351dec4f7a7582))
+* set dirty on refresh ([2035632](https://github.com/mob-sakai/UIEffectSnapshot/commit/203563218adc09b3812bd9e46ecd6a3804c2d82a))
+* When distortion is enabled, the captured image is flipped upside down ([7d3b978](https://github.com/mob-sakai/UIEffectSnapshot/commit/7d3b97865f00cdb61638b98418ecf60440dfaa34))
+
 # [1.0.0-preview.6](https://github.com/mob-sakai/UIEffectSnapshot/compare/v1.0.0-preview.5...v1.0.0-preview.6) (2020-09-30)
 
 
