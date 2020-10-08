@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Packages/UIEffectSnapshot/Samples/Demo/UIEffectSnapshot_Demo.unity
-    guid: 36da8c15f572c4f8ca55f76f9e6ce154
+    path: Assets/Demo/UIEffectSnapshot_Demo_TMPro.unity
+    guid: 73261067f79f946bb9fce80fa56f5e1a
   m_configObjects: {}

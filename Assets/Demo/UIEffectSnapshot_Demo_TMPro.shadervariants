@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!200 &20000000
+ShaderVariantCollection:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UIEffectSnapshot_Demo_TMPro
+  m_Shaders:
+  - first: {fileID: 10770, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: BILLBOARD_FACE_CAMERA_POS SOFTPARTICLES_ON _DEPTH_NO_MSAA _MAIN_LIGHT_SHADOWS
+          _MIXED_LIGHTING_SUBTRACTIVE
+        passType: 0
+      - keywords: BILLBOARD_FACE_CAMERA_POS LIGHTPROBE_SH SOFTPARTICLES_ON UNITY_HDR_ON
+          _DEPTH_NO_MSAA _MAIN_LIGHT_SHADOWS _MIXED_LIGHTING_SUBTRACTIVE
+        passType: 0
+      - keywords: UNITY_UI_ALPHACLIP
+        passType: 0
+  - first: {fileID: 66, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 106, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: _SUNDISK_SIMPLE
+        passType: 0
+      - keywords: BILLBOARD_FACE_CAMERA_POS SOFTPARTICLES_ON UNITY_HDR_ON _DEPTH_NO_MSAA
+          _MAIN_LIGHT_SHADOWS _MIXED_LIGHTING_SUBTRACTIVE _SUNDISK_SIMPLE
+        passType: 0
+  - first: {fileID: 9101, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: b8b09b874fb98444cbccca9849b1771b, type: 3}
+    second:
+      variants:
+      - keywords: DISTORTION NOISE RGB_SHIFT SCANNING_LINE VIGNETTE
+        passType: 0
+  - first: {fileID: 4800000, guid: ca3cd1303a4b14179948dc8197779ce2, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: FILL
+        passType: 0
+      - keywords: MEDIUMBLUR
+        passType: 0
+  - first: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: OUTLINE_ON
+        passType: 0
+      - keywords: BILLBOARD_FACE_CAMERA_POS LIGHTPROBE_SH SOFTPARTICLES_ON UNITY_HDR_ON
+          _DEPTH_NO_MSAA _MAIN_LIGHT_SHADOWS _MIXED_LIGHTING_SUBTRACTIVE
+        passType: 0
+      - keywords: BILLBOARD_FACE_CAMERA_POS LIGHTPROBE_SH OUTLINE_ON SOFTPARTICLES_ON
+          UNITY_HDR_ON _DEPTH_NO_MSAA _MAIN_LIGHT_SHADOWS _MIXED_LIGHTING_SUBTRACTIVE
+        passType: 0
+  - first: {fileID: 4800000, guid: d6dae50ee9e1bfa4db75f19f99355220, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: BILLBOARD_FACE_CAMERA_POS SOFTPARTICLES_ON UNITY_HDR_ON _DEPTH_NO_MSAA
+          _MAIN_LIGHT_SHADOWS _MIXED_LIGHTING_SUBTRACTIVE
+        passType: 0
+  - first: {fileID: 4800000, guid: 65df88701913c224d95fc554db28381a, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: BILLBOARD_FACE_CAMERA_POS SOFTPARTICLES_ON UNITY_HDR_ON _DEPTH_NO_MSAA
+          _MAIN_LIGHT_SHADOWS _MIXED_LIGHTING_SUBTRACTIVE
+        passType: 0
+  - first: {fileID: 4800000, guid: e7857e9d0c934dc4f83f270f8447b006, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: BILLBOARD_FACE_CAMERA_POS SOFTPARTICLES_ON UNITY_HDR_ON _DEPTH_NO_MSAA
+          _MAIN_LIGHT_SHADOWS _MIXED_LIGHTING_SUBTRACTIVE
+        passType: 0
+  - first: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: _MAIN_LIGHT_SHADOWS _MIXED_LIGHTING_SUBTRACTIVE
+        passType: 13
+      - keywords: BILLBOARD_FACE_CAMERA_POS SOFTPARTICLES_ON UNITY_HDR_ON _DEPTH_NO_MSAA
+          _MAIN_LIGHT_SHADOWS
+        passType: 13
+      - keywords: BILLBOARD_FACE_CAMERA_POS SOFTPARTICLES_ON UNITY_HDR_ON _DEPTH_NO_MSAA
+          _MAIN_LIGHT_SHADOWS _MIXED_LIGHTING_SUBTRACTIVE
+        passType: 13
+  - first: {fileID: 4800000, guid: 0ca6dca7396eb48e5849247ffd444914, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 11
+      - keywords: 
+        passType: 13
