@@ -1,3 +1,10 @@
+# 1.0.0 (2020-12-23)
+
+
+### Bug Fixes
+
+* fix demo for Unity 2018.3 ([b2ce3aa](https://github.com/mob-sakai/UIEffectSnapshot/commit/b2ce3aa4f17f63bea52a184a13d460ca8366b694))
+
 # [1.0.0-preview.7](https://github.com/mob-sakai/UIEffectSnapshot/compare/v1.0.0-preview.6...v1.0.0-preview.7) (2020-10-01)
 
 
