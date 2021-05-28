@@ -212,9 +212,8 @@ namespace Coffee.UIExtensions
                 {
                     s_GlobalRt = rt;
                 }
-
-                request.renderTexture = rt;
             }
+            request.renderTexture = rt;
 
             // Setup command buffer.
             SetupCommandBuffer(request);
