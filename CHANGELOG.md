@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/mob-sakai/UIEffectSnapshot/compare/1.0.0...1.0.1) (2021-05-28)
+
+
+### Bug Fixes
+
+* failed to capture in global mode ([de03457](https://github.com/mob-sakai/UIEffectSnapshot/commit/de034573742c64d67c7749002ec5e868337957de))
+
 # 1.0.0 (2020-12-23)
 
 
