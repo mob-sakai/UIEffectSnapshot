@@ -50,7 +50,7 @@ namespace Coffee.UIExtensions
         /// <summary>
         /// Global captured texture.
         /// </summary>
-        public RenderTexture globalCapturedTexture
+        public static RenderTexture globalCapturedTexture
         {
             get { return UIEffectSnapshotUpdater.instance.globalCapturedTexture; }
         }
